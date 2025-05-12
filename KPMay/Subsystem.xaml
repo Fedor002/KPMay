@@ -1,0 +1,50 @@
+﻿<Window x:Class="KPMay.Subsystem"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:KPMay"
+        mc:Ignorable="d"
+        Title="Subsystem" Height="450" Width="800">
+    <Grid>
+        <Label Content="Подсистема" HorizontalAlignment="Left" Margin="30,31,0,0" VerticalAlignment="Top"/>
+        <TextBox HorizontalAlignment="Left" Margin="30,57,0,0" TextWrapping="Wrap" Text="{Binding Name}" VerticalAlignment="Top" Width="120"/>
+        <Label Content="Оценка" HorizontalAlignment="Left" Margin="164,31,0,0" VerticalAlignment="Top"/>
+        <TextBox HorizontalAlignment="Left" Margin="164,57,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="52"/>
+        <Grid HorizontalAlignment="Left" VerticalAlignment="Top" Margin="508,48,0,0" Height="376" Width="282">
+            <TreeView x:Name="treeView1">
+                <TreeView.ItemTemplate>
+                    <HierarchicalDataTemplate ItemsSource="{Binding Nodes}">
+                        <TextBlock Text="{Binding Name}" />
+                    </HierarchicalDataTemplate>
+                </TreeView.ItemTemplate>
+            </TreeView>
+
+        </Grid>
+        <Label Content="Отображение" HorizontalAlignment="Left" Margin="508,17,0,0" VerticalAlignment="Top"/>
+        <Button Content="Оценка технологий" HorizontalAlignment="Left" Margin="363,354,0,0" VerticalAlignment="Top" Width="140" />
+        <Button Content="Оценка произовдства" HorizontalAlignment="Left" Margin="363,379,0,0" VerticalAlignment="Top" Width="140"/>
+        <Button Content="Оценка произовдства" HorizontalAlignment="Left" Margin="363,404,0,0" VerticalAlignment="Top" Width="140"/>
+        <Grid HorizontalAlignment="Left" Height="18" VerticalAlignment="Top" Width="18" Margin="340,357,0,0" MouseLeftButtonDown="Grid_MouseLeftButtonDownIn1">
+            <Ellipse HorizontalAlignment="Left" Height="17" Stroke="Black" VerticalAlignment="Top" Width="17" Cursor="Hand" Fill="Black"/>
+            <Label Content="i" HorizontalAlignment="Center" VerticalAlignment="Top" IsEnabled="False" Width="13" Margin="0,-4,0,0" Foreground="White"/>
+
+        </Grid>
+        <Grid HorizontalAlignment="Left" Height="18" VerticalAlignment="Top" Width="18" Margin="340,382,0,0" MouseLeftButtonDown="Grid_MouseLeftButtonDownIn2">
+            <Ellipse HorizontalAlignment="Left" Height="17" Stroke="Black" VerticalAlignment="Top" Width="17" Cursor="Hand" Fill="Black"/>
+            <Label Content="i" HorizontalAlignment="Center" VerticalAlignment="Top" IsEnabled="False" Width="13" Margin="0,-4,0,0" Foreground="White"/>
+
+        </Grid>
+        <Grid HorizontalAlignment="Left" Height="18" VerticalAlignment="Top" Width="18" Margin="340,406,0,0" MouseLeftButtonDown="Grid_MouseLeftButtonDownIn3">
+            <Ellipse HorizontalAlignment="Left" Height="17" Stroke="Black" VerticalAlignment="Top" Width="17" Cursor="Hand" Fill="Black"/>
+            <Label Content="i" HorizontalAlignment="Center" VerticalAlignment="Top" IsEnabled="False" Width="13" Margin="0,-4,0,0" Foreground="White"/>
+
+        </Grid>
+        <Button Content="Вернуться в корень" HorizontalAlignment="Left" Margin="30,400,0,0" VerticalAlignment="Top" Click="Button_Click_1"/>
+        <Button Content="Перейти в подсистему" HorizontalAlignment="Left" Margin="375,48,0,0" VerticalAlignment="Top"/>
+        <Button Content="Добавить Уровень" HorizontalAlignment="Left" Margin="30,148,0,0" VerticalAlignment="Top" Width="120" Click="Button_Click" />
+        <Button Content="Сохранить изменения" HorizontalAlignment="Left" Margin="30,90,0,0" VerticalAlignment="Top" Width="140" />
+        <TextBox x:Name="ElementTextBox" HorizontalAlignment="Left" Margin="30,125,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
+
+    </Grid>
+</Window>
