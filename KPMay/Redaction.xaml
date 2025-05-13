@@ -55,5 +55,10 @@
         <Button Content="Сохранить изменения" HorizontalAlignment="Left" Margin="20,80,0,0" VerticalAlignment="Top" Width="140" Click="Button_Click"/>
         <TextBox x:Name="ElementTextBox" HorizontalAlignment="Left" Margin="20,111,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120" TextChanged="TextBox_TextChanged"/>
 
+        <Button Content="Создать матрицу системы" 
+        Click="CreateSquareMatrixButton_Click"
+        Margin="349,80,0,334"
+        HorizontalAlignment="Left"
+        Width="154"/>
     </Grid>
 </Window>

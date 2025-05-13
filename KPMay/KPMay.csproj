@@ -58,6 +58,9 @@
     </ApplicationDefinition>
     <Compile Include="AD\AD_Tree.cs" />
     <Compile Include="AD\AD_XML.cs" />
+    <Compile Include="CulcSomthing.xaml.cs">
+      <DependentUpon>CulcSomthing.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Instractions.xaml.cs">
       <DependentUpon>Instractions.xaml</DependentUpon>
     </Compile>
@@ -70,6 +73,10 @@
     <Compile Include="Subsystem.xaml.cs">
       <DependentUpon>Subsystem.xaml</DependentUpon>
     </Compile>
+    <Page Include="CulcSomthing.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Instractions.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
