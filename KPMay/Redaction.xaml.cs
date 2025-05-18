@@ -28,6 +28,7 @@ namespace KPMay
     {
         AD_XML XML = new AD_XML();
         ObservableCollection<AD_Tree> nodes;
+        private Dictionary<string, double> _vectorValues;
         public Redaction()
         {
             InitializeComponent();
@@ -37,6 +38,13 @@ namespace KPMay
             AD_Tree tree = XML.GetTreeFrom_xml();
             nodes = tree.Nodes;
             treeView1.ItemsSource = nodes;
+        }
+
+        // Вспомогательный класс для элемента вектора
+        public class VectorItem
+        {
+            public string SystemName { get; set; }
+            public double Value { get; set; }
         }
 
         private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -299,22 +307,102 @@ namespace KPMay
                 }
             };
 
+            var button = new Button
+            {
+                Content = "Перейти к заполнению вектора",
+                HorizontalAlignment = HorizontalAlignment.Center,
+                Margin = new Thickness(0, 10, 0, 0)
+            };
+
+            var stackPanel = new StackPanel();
+            stackPanel.Children.Add(grid);
+            stackPanel.Children.Add(button);
+
             var matrixWindow = new Window
             {
                 Title = $"Матрица связей систем (порядок {matrix.Size})",
-                Content = grid,
+                Content = stackPanel,
                 Width = 800,
-                Height = 600
+                Height = 650
+            };
+
+            button.Click += (s, e) =>
+            {
+                matrixWindow.Close();
+                ShowVectorInput(matrix);
             };
 
             matrixWindow.Show();
         }
 
-        // Вспомогательный класс для отображения строк матрицы
-        public class MatrixRow
+        private void ShowVectorInput(SquareMatrix matrix)
+        {
+            var rootNames = new List<string>();
+            foreach (AD_Tree node in treeView1.Items)
+            {
+                rootNames.Add(node.Name);
+            }
+
+            // Инициализация вектора (значения по умолчанию 0)
+            _vectorValues = rootNames.ToDictionary(name => name, _ => 0.0);
+
+            var grid = new DataGrid
+            {
+                AutoGenerateColumns = false,
+                CanUserAddRows = false,
+                CanUserDeleteRows = false,
+                ItemsSource = _vectorValues.Select(v => new VectorItem
+                {
+                    SystemName = v.Key,
+                    Value = v.Value
+                }).ToList(),
+                Margin = new Thickness(10)
+            };
+
+            grid.Columns.Add(new DataGridTextColumn
+            {
+                Header = "Система",
+                Binding = new Binding("SystemName"),
+                IsReadOnly = true
+            });
+
+            grid.Columns.Add(new DataGridTextColumn
+            {
+                Header = "Значение",
+                Binding = new Binding("Value")
+            });
+
+            // Обновляем вектор при изменении ячейки
+            grid.CellEditEnding += (sender, e) =>
+            {
+                if (e.EditAction == DataGridEditAction.Commit && e.Column.Header.ToString() == "Значение")
+                {
+                    var editedItem = (VectorItem)e.Row.Item;
+                    var newValue = Convert.ToDouble(((TextBox)e.EditingElement).Text);
+
+                    _vectorValues[editedItem.SystemName] = newValue; // Обновляем значение в словаре
+                }
+            };
+
+            var vectorWindow = new Window
+            {
+                Title = "Вектор значений систем",
+                Content = grid,
+                Width = 400,
+                Height = 500
+            };
+
+            vectorWindow.Show();
+        }
+
+
+    }
+
+    // Вспомогательный класс для отображения строк матрицы
+    public class MatrixRow
         {
             public string RowName { get; set; }
             public double[] Values { get; set; }
         }
-    }
+    
 }
