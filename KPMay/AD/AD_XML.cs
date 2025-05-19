@@ -43,6 +43,7 @@ namespace KPMay
             catch (Exception ex)
             {
                 _doc = null;
+                throw new InvalidOperationException($"Ошибка при чтении xml: {path}", ex);
             }
         }
 

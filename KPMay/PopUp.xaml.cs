@@ -19,9 +19,13 @@ namespace KPMay
     /// </summary>
     public partial class PopUp : Window
     {
+        AD_Sqlite ad_sqlite = new AD_Sqlite();
+        AD_APP ad_app = new AD_APP();
         public PopUp()
         {
             InitializeComponent();
+            ad_sqlite.CreateDBFile("%APPDATA%\\KorabelProFit", "TestDB");
+            ad_app.CreateBasicTables("%APPDATA%\\KorabelProFit", "TestDB");
         }
     }
 }
