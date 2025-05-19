@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.Data.Sqlite;
+using System.Data.SQLite;
 
 namespace KPMay
 {
@@ -12,7 +12,7 @@ namespace KPMay
         public void CreateBasicTables(string path,string dbName)
         {
             string _path = AD_General.ConvertEnviromentPatToPath(path) + "\\" + dbName + ".db";
-            using (SqliteConnection connection = new SqliteConnection($"Data Source={_path};Version=3;"))
+            using (SQLiteConnection connection = new SQLiteConnection($"Data Source={_path};Version=3;"))
             {
                 connection.Open();
 
@@ -25,7 +25,7 @@ namespace KPMay
                     );
                 ";
 
-                using (var cmd = new SqliteCommand(cmd_user, connection))
+                using (var cmd = new SQLiteCommand(cmd_user, connection))
                 {
                     cmd.ExecuteNonQuery();
                 }
@@ -38,7 +38,7 @@ namespace KPMay
                     );
                 ";
 
-                using (var cmd = new SqliteCommand(cmd_enterprise, connection))
+                using (var cmd = new SQLiteCommand(cmd_enterprise, connection))
                 {
                     cmd.ExecuteNonQuery();
                 }
@@ -51,7 +51,7 @@ namespace KPMay
                     );
                 ";
 
-                using (var cmd = new SqliteCommand(cmd_job, connection))
+                using (var cmd = new SQLiteCommand(cmd_job, connection))
                 {
                     cmd.ExecuteNonQuery();
                 }
