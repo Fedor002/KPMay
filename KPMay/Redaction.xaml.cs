@@ -16,6 +16,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Xml;
 using System.Xml.Linq;
+using KPMay.Math;
 
 namespace KPMay
 {
@@ -29,6 +30,7 @@ namespace KPMay
         AD_XML XML = new AD_XML();
         ObservableCollection<AD_Tree> nodes;
         private Dictionary<string, double> _vectorValues;
+        private SquareMatrix MatrixContext;
         public Redaction()
         {
             InitializeComponent();
@@ -50,6 +52,13 @@ namespace KPMay
         private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
 
+        }
+
+        private void CalcTechno(object sender, RoutedEventArgs e)
+        {
+            MathMatrix calc = new MathMatrix(MatrixContext, _vectorValues);
+
+            double N = calc.MakeTheFunny();
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -174,41 +183,6 @@ namespace KPMay
             return treeView.Items.Count;
         }
 
-        public class SquareMatrix
-        {
-            private double[,] _matrix;
-            public int Size { get; }
-            public List<string> RowNames { get; }
-
-            public SquareMatrix(int size, List<string> names)
-            {
-                Size = size;
-                _matrix = new double[size, size];
-                RowNames = names;
-            }
-
-            public double this[int row, int col]
-            {
-                get => _matrix[row, col];
-                set => _matrix[row, col] = value;
-            }
-
-            public double this[string rowName, string colName]
-            {
-                get
-                {
-                    int row = RowNames.IndexOf(rowName);
-                    int col = RowNames.IndexOf(colName);
-                    return _matrix[row, col];
-                }
-                set
-                {
-                    int row = RowNames.IndexOf(rowName);
-                    int col = RowNames.IndexOf(colName);
-                    _matrix[row, col] = value;
-                }
-            }
-        }
 
         private void CreateSquareMatrixButton_Click(object sender, RoutedEventArgs e)
         {
@@ -227,19 +201,20 @@ namespace KPMay
                 return;
             }
 
-            // Создаем матрицу с передачей имен
-            var matrix = new SquareMatrix(size, rootNames);
+
+            MatrixContext = new SquareMatrix(size, rootNames);
+
 
             // Заполняем нулями (или другими значениями по умолчанию)
             for (int i = 0; i < size; i++)
             {
                 for (int j = 0; j < size; j++)
                 {
-                    matrix[i, j] = 0;
+                    MatrixContext[i, j] = 0;
                 }
             }
 
-            ShowMatrix(matrix);
+            ShowMatrix(MatrixContext);
         }
 
         private void ShowMatrix(SquareMatrix matrix)

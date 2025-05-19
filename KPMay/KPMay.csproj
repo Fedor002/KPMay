@@ -64,6 +64,8 @@
     <Compile Include="Instractions.xaml.cs">
       <DependentUpon>Instractions.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Math\MathMatrix.cs" />
+    <Compile Include="Math\SquareMatrix.cs" />
     <Compile Include="PopUp.xaml.cs">
       <DependentUpon>PopUp.xaml</DependentUpon>
     </Compile>
