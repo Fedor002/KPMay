@@ -21,7 +21,7 @@ namespace KPMay
             _vector = vector;
         }
 
-        public double MakeTheFunny() {
+        public double CalcTechLvl() {
 
             List<double> vector = new List<double>();
 

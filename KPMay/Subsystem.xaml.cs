@@ -14,6 +14,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Xml;
+using KPMay.AdditionalClasses;
+using KPMay.Math;
 
 namespace KPMay
 {
@@ -24,7 +26,9 @@ namespace KPMay
     {
         AD_XML XML = new AD_XML();
         public object SelectedItem { get; set; }
-        ObservableCollection<AD_Tree> nodes;
+        public FillMatrix fillMatrix;
+        public string _filePath = @"D:\Downloads\Telegram Desktop\test.xml"; // Путь к вашему XML файлу
+
         public Subsystem()
         {
             InitializeComponent();
@@ -43,6 +47,7 @@ namespace KPMay
             }
 
 
+            fillMatrix = new FillMatrix(treeView1);
         }
 
         private void Grid_MouseLeftButtonDownIn1(object sender, RoutedEventArgs e)
@@ -127,7 +132,7 @@ namespace KPMay
             XmlDocument xmlDoc = new XmlDocument();
             try
             {
-                xmlDoc.Load(@"D:\Downloads\Telegram Desktop\test.xml");
+                xmlDoc.Load(_filePath);
             }
             catch (Exception ex)
             {
@@ -153,7 +158,7 @@ namespace KPMay
             // Сохраняем изменения
             try
             {
-                xmlDoc.Save(@"D:\Downloads\Telegram Desktop\test.xml");
+                xmlDoc.Save(_filePath);
             }
             catch (Exception ex)
             {
@@ -184,7 +189,7 @@ namespace KPMay
             if (currentContext == null) return;
 
             // Загружаем XML
-            XML.LoadXML(@"D:\Downloads\Telegram Desktop\test.xml");
+            XML.LoadXML(_filePath);
             AD_Tree fullTree = XML.GetTreeFrom_xml();
 
             // Находим соответствующий узел в новом дереве
@@ -230,6 +235,43 @@ namespace KPMay
             Redaction redaction = new Redaction();
             this.Close();
             redaction.Show();
+        }
+
+        private void Button_Click_2(object sender, RoutedEventArgs e)
+        {
+            fillMatrix.CreateSquareMatrix(sender, e);
+        }
+
+        private void Button_Click_3(object sender, RoutedEventArgs e)
+        {
+            MathMatrix calc = new MathMatrix(fillMatrix.GetResultMatr(), fillMatrix.GetResultVect());
+
+            double N = calc.CalcTechLvl();
+
+            XmlDocument xmlDoc = new XmlDocument();
+            xmlDoc.Load(_filePath);
+            var neededName = DataContext as AD_Tree;
+
+            // Найти нужный узел по имени
+            XmlNode targetNode = xmlDoc.SelectSingleNode($"//node[@name='{neededName.Name}']");
+            if (targetNode != null)
+            {
+                XmlAttribute gradeAttr = xmlDoc.CreateAttribute("grade");
+                gradeAttr.Value = Convert.ToString(N);
+                targetNode.Attributes.Append(gradeAttr);
+
+                xmlDoc.Save(_filePath);
+            }
+        }
+
+        private void Button_Click_4(object sender, RoutedEventArgs e)
+        {
+            var selectedOBj = treeView1.SelectedItem as AD_Tree;
+
+            Subsystem subsystem = new Subsystem();
+            subsystem.DataContext = selectedOBj;
+            this.Close();
+            subsystem.Show();
         }
     }
 }

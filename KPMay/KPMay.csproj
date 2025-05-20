@@ -88,6 +88,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="AdditionalClasses\FillMatrix.cs" />
     <Compile Include="AD\AD_Tree.cs" />
     <Compile Include="AD\AD_XML.cs" />
     <Compile Include="AD\AD_Sqlite.cs" />

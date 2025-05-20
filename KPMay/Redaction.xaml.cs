@@ -17,6 +17,7 @@ using System.Windows.Shapes;
 using System.Xml;
 using System.Xml.Linq;
 using KPMay.Math;
+using KPMay.AdditionalClasses;
 
 namespace KPMay
 {
@@ -31,15 +32,18 @@ namespace KPMay
         ObservableCollection<AD_Tree> nodes;
         private Dictionary<string, double> _vectorValues;
         private SquareMatrix MatrixContext;
+        public string _filePath = @"D:\Downloads\Telegram Desktop\test.xml"; // Путь к вашему XML файлу
+        public FillMatrix fillMatrix;
         public Redaction()
         {
             InitializeComponent();
 
-            XML.LoadXML(@"D:\Downloads\Telegram Desktop\test.xml");
+            XML.LoadXML(_filePath);
 
             AD_Tree tree = XML.GetTreeFrom_xml();
             nodes = tree.Nodes;
             treeView1.ItemsSource = nodes;
+            fillMatrix = new FillMatrix(treeView1);
         }
 
         // Вспомогательный класс для элемента вектора
@@ -56,15 +60,29 @@ namespace KPMay
 
         private void CalcTechno(object sender, RoutedEventArgs e)
         {
-            MathMatrix calc = new MathMatrix(MatrixContext, _vectorValues);
+            MathMatrix calc = new MathMatrix(fillMatrix.GetResultMatr(), fillMatrix.GetResultVect());
 
-            double N = calc.MakeTheFunny();
+            double N = calc.CalcTechLvl();
+
+            XmlDocument xmlDoc = new XmlDocument();
+            xmlDoc.Load(_filePath);
+
+            // Найти нужный узел по имени
+            XmlNode targetNode = xmlDoc.SelectSingleNode($"//node[@name='{treeView1.Name}']");
+            if (targetNode != null)
+            {
+                XmlAttribute gradeAttr = xmlDoc.CreateAttribute("grade");
+                gradeAttr.Value = Convert.ToString(N);
+                targetNode.Attributes.Append(gradeAttr);
+
+                xmlDoc.Save(_filePath);
+            }
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             XmlDocument xmlDoc = new XmlDocument();
-            xmlDoc.Load(@"D:\Downloads\Telegram Desktop\test.xml"); 
+            xmlDoc.Load(_filePath); 
 
             string newNodeName = ElementTextBox.Text;
 
@@ -74,7 +92,7 @@ namespace KPMay
             XmlElement root = xmlDoc.DocumentElement;
             root.AppendChild(newNode);
 
-            xmlDoc.Save(@"D:\Downloads\Telegram Desktop\test.xml"); 
+            xmlDoc.Save(_filePath); 
 
             MessageBox.Show("Новый узел успешно добавлен!");
 
@@ -85,7 +103,7 @@ namespace KPMay
 
         private void ReloadTreeView()
         {
-            XML.LoadXML(@"D:\Downloads\Telegram Desktop\test.xml");
+            XML.LoadXML(_filePath);
 
             AD_Tree tree = XML.GetTreeFrom_xml();
             nodes = tree.Nodes;
@@ -183,201 +201,9 @@ namespace KPMay
             return treeView.Items.Count;
         }
 
-
         private void CreateSquareMatrixButton_Click(object sender, RoutedEventArgs e)
         {
-            // Получаем названия корневых узлов
-            var rootNames = new List<string>();
-            foreach (AD_Tree node in treeView1.Items)
-            {
-                rootNames.Add(node.Name);
-            }
-
-            int size = rootNames.Count;
-
-            if (size == 0)
-            {
-                MessageBox.Show("Нет корневых узлов в дереве!");
-                return;
-            }
-
-
-            MatrixContext = new SquareMatrix(size, rootNames);
-
-
-            // Заполняем нулями (или другими значениями по умолчанию)
-            for (int i = 0; i < size; i++)
-            {
-                for (int j = 0; j < size; j++)
-                {
-                    MatrixContext[i, j] = 0;
-                }
-            }
-
-            ShowMatrix(MatrixContext);
+            fillMatrix.CreateSquareMatrix(sender, e);
         }
-
-        private void ShowMatrix(SquareMatrix matrix)
-        {
-            // Получаем названия корневых узлов
-            var rootNames = new List<string>();
-            foreach (AD_Tree node in treeView1.Items)
-            {
-                rootNames.Add(node.Name); // Используем свойство Name из AD_Tree
-            }
-
-            var grid = new DataGrid
-            {
-                AutoGenerateColumns = false,
-                CanUserAddRows = false,
-                CanUserDeleteRows = false,
-                HeadersVisibility = DataGridHeadersVisibility.All
-            };
-
-            // Добавляем колонку с названиями строк
-            grid.Columns.Add(new DataGridTextColumn
-            {
-                Header = "Системы",
-                Binding = new Binding("RowName"),
-                IsReadOnly = true
-            });
-
-            // Добавляем колонки с названиями корневых узлов
-            for (int j = 0; j < matrix.Size; j++)
-            {
-                grid.Columns.Add(new DataGridTextColumn
-                {
-                    Header = rootNames[j],
-                    Binding = new Binding($"Values[{j}]")
-                });
-            }
-
-            // Создаем данные для привязки
-            var items = new List<MatrixRow>();
-            for (int i = 0; i < matrix.Size; i++)
-            {
-                var values = new double[matrix.Size];
-                for (int j = 0; j < matrix.Size; j++)
-                {
-                    values[j] = matrix[i, j];
-                }
-
-                items.Add(new MatrixRow
-                {
-                    RowName = rootNames[i], // Название строки
-                    Values = values
-                });
-            }
-
-            grid.ItemsSource = items;
-            grid.CellEditEnding += (s, e) =>
-            {
-                if (e.EditAction == DataGridEditAction.Commit && e.Column.Header.ToString() != "Системы")
-                {
-                    int rowIndex = e.Row.GetIndex();
-                    int columnIndex = e.Column.DisplayIndex - 1; // -1 потому что первая колонка - названия
-
-                    var newValue = Convert.ToDouble(((TextBox)e.EditingElement).Text);
-                    matrix[rowIndex, columnIndex] = newValue;
-                }
-            };
-
-            var button = new Button
-            {
-                Content = "Перейти к заполнению вектора",
-                HorizontalAlignment = HorizontalAlignment.Center,
-                Margin = new Thickness(0, 10, 0, 0)
-            };
-
-            var stackPanel = new StackPanel();
-            stackPanel.Children.Add(grid);
-            stackPanel.Children.Add(button);
-
-            var matrixWindow = new Window
-            {
-                Title = $"Матрица связей систем (порядок {matrix.Size})",
-                Content = stackPanel,
-                Width = 800,
-                Height = 650
-            };
-
-            button.Click += (s, e) =>
-            {
-                matrixWindow.Close();
-                ShowVectorInput(matrix);
-            };
-
-            matrixWindow.Show();
-        }
-
-        private void ShowVectorInput(SquareMatrix matrix)
-        {
-            var rootNames = new List<string>();
-            foreach (AD_Tree node in treeView1.Items)
-            {
-                rootNames.Add(node.Name);
-            }
-
-            // Инициализация вектора (значения по умолчанию 0)
-            _vectorValues = rootNames.ToDictionary(name => name, _ => 0.0);
-
-            var grid = new DataGrid
-            {
-                AutoGenerateColumns = false,
-                CanUserAddRows = false,
-                CanUserDeleteRows = false,
-                ItemsSource = _vectorValues.Select(v => new VectorItem
-                {
-                    SystemName = v.Key,
-                    Value = v.Value
-                }).ToList(),
-                Margin = new Thickness(10)
-            };
-
-            grid.Columns.Add(new DataGridTextColumn
-            {
-                Header = "Система",
-                Binding = new Binding("SystemName"),
-                IsReadOnly = true
-            });
-
-            grid.Columns.Add(new DataGridTextColumn
-            {
-                Header = "Значение",
-                Binding = new Binding("Value")
-            });
-
-            // Обновляем вектор при изменении ячейки
-            grid.CellEditEnding += (sender, e) =>
-            {
-                if (e.EditAction == DataGridEditAction.Commit && e.Column.Header.ToString() == "Значение")
-                {
-                    var editedItem = (VectorItem)e.Row.Item;
-                    var newValue = Convert.ToDouble(((TextBox)e.EditingElement).Text);
-
-                    _vectorValues[editedItem.SystemName] = newValue; // Обновляем значение в словаре
-                }
-            };
-
-            var vectorWindow = new Window
-            {
-                Title = "Вектор значений систем",
-                Content = grid,
-                Width = 400,
-                Height = 500
-            };
-
-            vectorWindow.Show();
-        }
-
-
     }
-
-    // Вспомогательный класс для отображения строк матрицы
-    public class MatrixRow
-        {
-            public string RowName { get; set; }
-            public double[] Values { get; set; }
-        }
-    
 }

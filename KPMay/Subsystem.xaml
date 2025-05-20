@@ -22,7 +22,7 @@
 
         </Grid>
         <Label Content="Отображение" HorizontalAlignment="Left" Margin="508,17,0,0" VerticalAlignment="Top"/>
-        <Button Content="Оценка технологий" HorizontalAlignment="Left" Margin="363,354,0,0" VerticalAlignment="Top" Width="140" />
+        <Button Content="Оценка технологий" HorizontalAlignment="Left" Margin="363,354,0,0" VerticalAlignment="Top" Width="140" Click="Button_Click_3" />
         <Button Content="Оценка произовдства" HorizontalAlignment="Left" Margin="363,379,0,0" VerticalAlignment="Top" Width="140"/>
         <Button Content="Оценка произовдства" HorizontalAlignment="Left" Margin="363,404,0,0" VerticalAlignment="Top" Width="140"/>
         <Grid HorizontalAlignment="Left" Height="18" VerticalAlignment="Top" Width="18" Margin="340,357,0,0" MouseLeftButtonDown="Grid_MouseLeftButtonDownIn1">
@@ -41,10 +41,11 @@
 
         </Grid>
         <Button Content="Вернуться в корень" HorizontalAlignment="Left" Margin="30,400,0,0" VerticalAlignment="Top" Click="Button_Click_1"/>
-        <Button Content="Перейти в подсистему" HorizontalAlignment="Left" Margin="375,48,0,0" VerticalAlignment="Top"/>
+        <Button Content="Перейти в подсистему" HorizontalAlignment="Left" Margin="375,48,0,0" VerticalAlignment="Top" Click="Button_Click_4"/>
         <Button Content="Добавить Уровень" HorizontalAlignment="Left" Margin="30,148,0,0" VerticalAlignment="Top" Width="120" Click="Button_Click" />
         <Button Content="Сохранить изменения" HorizontalAlignment="Left" Margin="30,90,0,0" VerticalAlignment="Top" Width="140" />
         <TextBox x:Name="ElementTextBox" HorizontalAlignment="Left" Margin="30,125,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
+        <Button Content="Заполнить матрицы" HorizontalAlignment="Left" Height="20" Margin="375,90,0,0" VerticalAlignment="Top" Width="128" Click="Button_Click_2"/>
 
     </Grid>
 </Window>
