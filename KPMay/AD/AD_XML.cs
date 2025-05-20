@@ -19,7 +19,9 @@ namespace KPMay
         {
             AD_Tree tree = new AD_Tree
             {
-                Name = xmlNode.Attributes?["name"]?.Value ?? xmlNode.Name
+                //Богохульник Анатолий был тут
+                Name = xmlNode.Attributes?["name"]?.Value ?? xmlNode.Name,
+                Grade = xmlNode.Attributes?["grade"]?.Value ?? null
             };
 
             foreach (XmlNode child in xmlNode.ChildNodes)

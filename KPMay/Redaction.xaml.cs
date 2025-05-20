@@ -43,7 +43,7 @@ namespace KPMay
             AD_Tree tree = XML.GetTreeFrom_xml();
             nodes = tree.Nodes;
             treeView1.ItemsSource = nodes;
-            fillMatrix = new FillMatrix(treeView1);
+            fillMatrix = new FillMatrix(tree);
         }
 
         // Вспомогательный класс для элемента вектора

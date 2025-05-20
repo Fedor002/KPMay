@@ -47,7 +47,7 @@ namespace KPMay
             }
 
 
-            fillMatrix = new FillMatrix(treeView1);
+            fillMatrix = new FillMatrix(data);
         }
 
         private void Grid_MouseLeftButtonDownIn1(object sender, RoutedEventArgs e)

@@ -21,11 +21,14 @@ namespace KPMay.AdditionalClasses
     {
         private Dictionary<string, double> _vectorValues;
         private SquareMatrix MatrixContext;
-        private TreeView treeView;
+        private TreeView treeView =new TreeView();
+        private AD_Tree data;
 
-        public FillMatrix(TreeView treeView)
+        public FillMatrix(AD_Tree dataIN)
         {
-            this.treeView = treeView;
+            data = dataIN;
+            var neededNodes = dataIN as AD_Tree;
+            treeView.ItemsSource = neededNodes.Nodes;
         }
 
         public void CreateSquareMatrix(object sender, RoutedEventArgs e)
@@ -163,7 +166,14 @@ namespace KPMay.AdditionalClasses
             }
 
             // Инициализация вектора (значения по умолчанию 0)
-            _vectorValues = rootNames.ToDictionary(name => name, _ => 0.0);
+            _vectorValues = new Dictionary<string, double>();
+            foreach (AD_Tree node in treeView.Items)
+            {
+                double value = 0.0;
+                if (!string.IsNullOrEmpty(node.Grade) && double.TryParse(node.Grade, out double parsed))
+                    value = parsed;
+                _vectorValues[node.Name] = value;
+            }
 
             var grid = new DataGrid
             {
