@@ -176,17 +176,6 @@ namespace KPMay
 
         }
 
-        private void Button_Click_1(object sender, RoutedEventArgs e)
-        {
-            var selectedOBj = treeView1.SelectedItem as AD_Tree;
-
-            Subsystem subsystem = new Subsystem();
-            subsystem.DataContext = selectedOBj;
-            this.Close();
-            subsystem.Show();
-
-        }
-
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
 
@@ -215,9 +204,10 @@ namespace KPMay
                 MessageBox.Show("Нет корневых узлов в дереве!");
                 return;
             }
+            
+            MatrixContext = new SquareMatrix(size, rootNames);
 
-
-            //MatrixContext = XML.ConvertNodeToMatrix();
+            MatrixContext._matrix = selectedNode.enterprise_matrix;
 
 
             // Заполняем нулями (или другими значениями по умолчанию)
@@ -320,6 +310,7 @@ namespace KPMay
             button.Click += (s, e) =>
             {
                 XML.AddMatrixToNode(("enterprise_matrix", matrix._matrix), ("id", "0"));
+                XML.SaveXML();
                 matrixWindow.Close();
                 ShowVectorInput(matrix);
             };
@@ -330,7 +321,7 @@ namespace KPMay
         private void ShowVectorInput(SquareMatrix matrix)
         {
             var rootNames = new List<string>();
-            foreach (AD_Tree node in treeView1.Items)
+            foreach (custom_system node in treeView1.Items)
             {
                 rootNames.Add(node.Name);
             }
@@ -405,6 +396,7 @@ namespace KPMay
             XML.AddUniqueChildToNodeById(("enterprise_grade", "5"), ("id", "0"));
             XML.AddUniqueChildToNodeById(("technology_grade", "6"), ("id", "0"));
             XML.SaveXML();
+            ReloadTreeView();
         }
     }
 

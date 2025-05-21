@@ -51,7 +51,7 @@
 
         </Grid>
         <Label Content="Отображение" HorizontalAlignment="Left" Margin="508,20,0,0" VerticalAlignment="Top"/>
-        <Button Content="Перейти в подсистему" HorizontalAlignment="Left" Margin="375,48,0,0" VerticalAlignment="Top" Click="Button_Click_1"/>
+        <Button Content="Перейти в подсистему" HorizontalAlignment="Left" Margin="375,48,0,0" VerticalAlignment="Top"/>
         <Button Content="Сохранить изменения" HorizontalAlignment="Left" Margin="20,80,0,0" VerticalAlignment="Top" Width="140" Click="Button_Click"/>
         <TextBox x:Name="ElementTextBox" HorizontalAlignment="Left" Margin="20,111,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120" TextChanged="TextBox_TextChanged"/>
 
