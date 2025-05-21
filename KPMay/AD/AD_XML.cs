@@ -7,6 +7,7 @@ using System.Data;
 using System.IO;
 using System.Xml;
 using System.Xml.Linq;
+using System.Windows.Media;
 
 namespace KPMay
 {
@@ -143,23 +144,18 @@ namespace KPMay
             }
         }
 
-        public double[,] ConvertNodeToMatrix(XmlNode parent, string node_name)
+        public double[,] ConvertNodeToMatrix(XmlNode node)
         {
             int rows = 0;
             int cols = 0;
             double[,] matrix;
-            XmlNode matrix_node;
-            if (parent == null)
-            {
-                throw new Exception($"Узел с атрибутом {parent.Name} не найден.");
-            }
-            else if (parent.SelectSingleNode(node_name) == null)
+            if (node == null)
             {
                 return null;
             }
             try 
             {
-                rows = int.Parse(parent.SelectSingleNode(node_name).Attributes["rows"].Value);
+                rows = int.Parse(node.Attributes["rows"].Value);
             }
             catch(Exception ex)
             {
@@ -167,7 +163,7 @@ namespace KPMay
             }
             try
             {
-                cols = int.Parse(parent.SelectSingleNode(node_name).Attributes["cols"].Value);
+                cols = int.Parse(node.Attributes["cols"].Value);
             }
             catch (Exception ex)
             {
@@ -175,9 +171,8 @@ namespace KPMay
             }
 
             matrix = new double[rows, cols];
-            matrix_node = parent.SelectSingleNode(node_name);
 
-            XmlNodeList row_nodes = matrix_node.SelectNodes("row");
+            XmlNodeList row_nodes = node.SelectNodes("row");
 
             for (int i = 0; i < rows; i++)
             {
@@ -311,9 +306,9 @@ namespace KPMay
             {
                 Name = GetNodeValue(GetChildNode(xmlNode, "name")),
                 Id = xmlNode.Attributes?["id"]?.Value ?? string.Empty,
-                enterprise_matrix = ConvertNodeToMatrix(xmlNode, "enterprise_matrix"),
-                technology_matrix = ConvertNodeToMatrix(xmlNode, "technology_matrix"),
-                integration_matrix = ConvertNodeToMatrix(xmlNode, "integration_matrix"),
+                enterprise_matrix = ConvertNodeToMatrix(GetChildNode(xmlNode, "enterprise_matrix")),
+                technology_matrix = ConvertNodeToMatrix(GetChildNode(xmlNode, "technology_matrix")),
+                integration_matrix = ConvertNodeToMatrix(GetChildNode(xmlNode, "integration_matrix")),
                 enterprise_grade = Convert.ToInt32(GetNodeValue(GetChildNode(xmlNode, "enterprise_grade"))),
                 technology_grade = Convert.ToInt32(GetNodeValue(GetChildNode(xmlNode, "technology_grade"))),
                 integration_grade = Convert.ToInt32(GetNodeValue(GetChildNode(xmlNode, "integration_grade")))

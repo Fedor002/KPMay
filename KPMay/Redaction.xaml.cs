@@ -217,7 +217,7 @@ namespace KPMay
             }
 
 
-            MatrixContext = XML.ConvertNodeToMatrix();
+            //MatrixContext = XML.ConvertNodeToMatrix();
 
 
             // Заполняем нулями (или другими значениями по умолчанию)
