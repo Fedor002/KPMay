@@ -321,7 +321,7 @@ namespace KPMay
 
             foreach (XmlNode child in xmlNode.ChildNodes)
             {
-                if (child.NodeType == XmlNodeType.Element)
+                if (child.NodeType == XmlNodeType.Element && new[] { "system", "subsystem" }.Contains(child.Name))
                 {
                     tree.Nodes.Add(GetSystemFromXml(child));
                 }
@@ -331,7 +331,7 @@ namespace KPMay
         }
         public custom_system GetSystemFromXml()
         {
-            custom_system tree = GetSystemFromXml(_doc.DocumentElement);
+            custom_system tree = GetSystemFromXml(GetChildNode(_doc.DocumentElement, "system"));
             return tree;
         }
     }
