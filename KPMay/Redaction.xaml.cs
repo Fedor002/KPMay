@@ -15,6 +15,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Xml;
+using _io = System.IO;
 using System.Xml.Linq;
 using KPMay.Math;
 
@@ -27,6 +28,7 @@ namespace KPMay
 
     public partial class Redaction : Window
     {
+        string _system_xml_path = _io.Path.Combine(AppContext.BaseDirectory, "test.xml");
         AD_XML XML = new AD_XML();
         ObservableCollection<AD_Tree> nodes;
         private Dictionary<string, double> _vectorValues;
@@ -35,7 +37,7 @@ namespace KPMay
         {
             InitializeComponent();
 
-            XML.LoadXML(@"D:\Downloads\Telegram Desktop\test.xml");
+            XML.LoadXML(_system_xml_path);
 
             AD_Tree tree = XML.GetTreeFrom_xml();
             nodes = tree.Nodes;
@@ -64,7 +66,7 @@ namespace KPMay
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             XmlDocument xmlDoc = new XmlDocument();
-            xmlDoc.Load(@"D:\Downloads\Telegram Desktop\test.xml"); 
+            xmlDoc.Load(_system_xml_path); 
 
             string newNodeName = ElementTextBox.Text;
 
@@ -74,7 +76,7 @@ namespace KPMay
             XmlElement root = xmlDoc.DocumentElement;
             root.AppendChild(newNode);
 
-            xmlDoc.Save(@"D:\Downloads\Telegram Desktop\test.xml"); 
+            xmlDoc.Save(_system_xml_path); 
 
             MessageBox.Show("Новый узел успешно добавлен!");
 
@@ -85,7 +87,7 @@ namespace KPMay
 
         private void ReloadTreeView()
         {
-            XML.LoadXML(@"D:\Downloads\Telegram Desktop\test.xml");
+            XML.LoadXML(_system_xml_path);
 
             AD_Tree tree = XML.GetTreeFrom_xml();
             nodes = tree.Nodes;

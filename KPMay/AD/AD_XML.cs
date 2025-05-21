@@ -7,7 +7,6 @@ using System.Data;
 using System.IO;
 using System.Xml;
 using System.Xml.Linq;
-using KPMay;
 
 namespace KPMay
 {
@@ -52,7 +51,69 @@ namespace KPMay
             AD_Tree tree = GetTreeFromXml(_doc.DocumentElement);
             return tree;
         }
+
+        /// <summary>
+        /// Метод читает значение первого попавшегося тега из XML-файла по указанному пути, подходит для xml с уникальными тегами.
+        /// </summary>
+        /// <param name="path">Путь к XML.</param>
+        /// <returns>Возвращает строку с содержимым тега или пустую строку, если тег не найден.</returns>
+        public static string read_value(string path, string tag_name)
+        {
+            string rezult = string.Empty;
+
+            using (XmlReader fr = XmlReader.Create(path))
+            {
+                try
+                {
+                    while (fr.Read())
+                    {
+                        if (fr.NodeType == XmlNodeType.Element && fr.Name == tag_name)
+                        {
+                            rezult = fr.ReadElementContentAsString();
+                            return rezult;
+                        }
+                    }
+                }
+                catch { }
+            }
+            return rezult;
+        }
+
+        /// <summary>
+        /// Метод
+        /// </summary>
+        /// <param name="tag_name">Пример: @"//encryption_file/epath"</param>
+        public static string read_value_by_path(string path, string tag_name)
+        {
+            string result = string.Empty;
+
+            using (FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read))
+            {
+                using (XmlReader fr = XmlReader.Create(fs))
+                {
+                    XmlDocument xml = new XmlDocument();
+                    xml.Load(fr);
+                    XmlNode node = xml.SelectSingleNode(tag_name);
+
+                    if (node != null)
+                    {
+                        result = node.InnerText;
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        public static DataSet ReadAllValues(string path)
+        {
+            DataSet result = new DataSet();
+            using (DataSet ds = new DataSet())
+            {
+                ds.ReadXml(path);
+                result = ds;
+            }
+            return result;
+        }
     }
-
-
 }

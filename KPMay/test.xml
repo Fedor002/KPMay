@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<root name="Система">
+	<node name="Подсистема 1">
+		<node name="ПодПодсистема 1" />
+		<node name="ПодПодсистема 2">
+			<node name="ПодПодПодсистема" />
+		</node>
+	</node>
+	<node name="Подсистема 2" />
+</root>
