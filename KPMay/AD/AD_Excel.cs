@@ -15,7 +15,7 @@ namespace KPMay
         _excel.Workbook eBook;
         _excel.Worksheet eSheet;
 
-        public Excel(string path, int sheet)
+        public AD_Excel(string path, int sheet)
         {
             this.path = path;
             eBook = eApp.Workbooks.Open(path);

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -12,8 +13,8 @@ namespace KPMay
         private string _name = "";
         private string _extension = "";
 
-        public MyFile() { }
-        public MyFile(string[] files)
+        public AD_MyFile() { }
+        public AD_MyFile(string[] files)
         {
             _path = files[0];
             _name = Path.GetFileName(_path);
