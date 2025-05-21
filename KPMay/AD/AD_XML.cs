@@ -331,7 +331,7 @@ namespace KPMay
         }
         public custom_system GetSystemFromXml()
         {
-            custom_system tree = GetSystemFromXml(GetChildNode(_doc.DocumentElement, "system"));
+            custom_system tree = GetSystemFromXml(_doc.DocumentElement);
             return tree;
         }
     }

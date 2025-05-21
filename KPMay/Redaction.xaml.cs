@@ -202,7 +202,8 @@ namespace KPMay
         {
             // Получаем названия корневых узлов
             var rootNames = new List<string>();
-            foreach (AD_Tree node in treeView1.Items)
+            custom_system selectedNode = (custom_system)treeView1.SelectedItem;
+            foreach (custom_system node in selectedNode.Nodes)
             {
                 rootNames.Add(node.Name);
             }
@@ -216,17 +217,17 @@ namespace KPMay
             }
 
 
-            MatrixContext = new SquareMatrix(size, rootNames);
+            MatrixContext = XML.ConvertNodeToMatrix();
 
 
             // Заполняем нулями (или другими значениями по умолчанию)
-            for (int i = 0; i < size; i++)
-            {
-                for (int j = 0; j < size; j++)
-                {
-                    MatrixContext[i, j] = 0;
-                }
-            }
+            //for (int i = 0; i < size; i++)
+            //{
+            //    for (int j = 0; j < size; j++)
+            //    {
+            //        MatrixContext[i, j] = 0;
+            //    }
+            //}
 
             ShowMatrix(MatrixContext);
         }
@@ -235,8 +236,9 @@ namespace KPMay
         {
             // Получаем названия корневых узлов
             var rootNames = new List<string>();
-            foreach (AD_Tree node in treeView1.Items)
-            {
+            custom_system selectedNode = (custom_system)treeView1.SelectedItem;
+            foreach (custom_system node in selectedNode.Nodes) 
+            { 
                 rootNames.Add(node.Name); // Используем свойство Name из AD_Tree
             }
 
@@ -317,6 +319,7 @@ namespace KPMay
 
             button.Click += (s, e) =>
             {
+                XML.AddMatrixToNode(("enterprise_matrix", matrix._matrix), ("id", "0"));
                 matrixWindow.Close();
                 ShowVectorInput(matrix);
             };
