@@ -50,11 +50,88 @@ namespace KPMay
                 throw new InvalidOperationException($"Ошибка при сохранении xml: {_path}", ex);
             }
         }
+
+        /// <summary>
+        /// Метод находит узел по ключевому атрибуту.
+        /// </summary>
+        /// <param name="Key">Кортеж из названия узла и значения наприимер.("id", "0")</param>
+        public XmlNode GetNodeByKey((string name, string value) Key)
+        {
+            try
+            { 
+                return _doc.SelectSingleNode($"//*[@{Key.name}='{Key.value}']"); 
+            }
+            catch
+            {
+                throw new Exception($"Узел <c атрибутом{Key.name}='{Key.value}'> не найден в XML.");
+            }          
+        }
+
+        /// <summary>
+        /// Метод добавляет узел в XML-файл для узла с указанным атрибутом и значением, если потомок уже существует, то его заменят.
+        /// </summary>
+        /// <param name="node">Кортеж из названия узла и значения наприимер.("Grade", "5")</param>
+        /// <param name="id">Кортеж из названия узла и значения наприимер.("id", "0")</param>
+        public void AddUniqueChildToNodeById((string name, string innerText) node, (string name, string value) id)
+        {
+            XmlNode Parent = _doc.SelectSingleNode($"//*[@{id.name}='{id.value}']");
+            if (Parent == null)
+                throw new Exception($"Узел <c атрибутом{id.name}='{id.value}'> не найден в XML.");
+
+            XmlElement child = _doc.CreateElement(node.name);
+            child.InnerText = node.innerText;
+
+            XmlNode check_child_exist = Parent.SelectSingleNode(node.name);
+            if (check_child_exist != null)
+            {
+                Parent.ReplaceChild(child, check_child_exist);
+            }
+            else
+            {
+                Parent.AppendChild(child);
+            }
+        }
+
+
+        public void AddMatrixToNode((string name,double[,] matrix) node, (string name, string value) id)
+        {
+            int rows = node.matrix.GetLength(0);
+            int cols = node.matrix.GetLength(1);
+
+            XmlNode Parent = _doc.SelectSingleNode($"//*[@{id.name}='{id.value}']");
+            if (Parent == null)
+                throw new Exception($"Узел <c атрибутом{id.name}='{id.value}'> не найден в XML.");
+
+            XmlElement matrix_e = _doc.CreateElement(node.name);
+
+            for (int i = 0; i < rows; i++)
+            {
+                XmlElement row = _doc.CreateElement("row");
+                for (int j = 0; j < cols; j++)
+                {
+                    XmlElement cell = _doc.CreateElement("cell");
+                    cell.InnerText = node.matrix[i, j].ToString(System.Globalization.CultureInfo.InvariantCulture);
+                    row.AppendChild(cell);
+                }
+                matrix_e.AppendChild(row);
+            }
+            XmlNode check_matrix_exist = Parent.SelectSingleNode(node.name);
+            if (check_matrix_exist != null)
+            {
+                Parent.ReplaceChild(matrix_e, check_matrix_exist);
+            }
+            else
+            {
+                Parent.AppendChild(matrix_e);
+            }
+        }
+
         private AD_Tree GetTreeFromXml(XmlNode xmlNode)
         {
             AD_Tree tree = new AD_Tree
             {
-                Name = xmlNode.Attributes?["name"]?.Value ?? xmlNode.Name
+                Name = xmlNode.Attributes?["name"]?.Value ?? xmlNode.Name,
+                Id = xmlNode.Attributes?["id"]?.Value ?? string.Empty
             };
 
             foreach (XmlNode child in xmlNode.ChildNodes)
@@ -92,13 +169,12 @@ namespace KPMay
         /// <summary>
         /// Метод читает значение первого попавшегося тега из XML-файла по указанному пути, подходит для xml с уникальными тегами.
         /// </summary>
-        /// <param name="path">Путь к XML.</param>
         /// <returns>Возвращает строку с содержимым тега или пустую строку, если тег не найден.</returns>
-        public static string read_value(string path, string tag_name)
+        public string read_value(string tag_name)
         {
             string rezult = string.Empty;
 
-            using (XmlReader fr = XmlReader.Create(path))
+            using (XmlReader fr = XmlReader.Create(_path))
             {
                 try
                 {
@@ -120,11 +196,11 @@ namespace KPMay
         /// Метод
         /// </summary>
         /// <param name="tag_name">Пример: @"//encryption_file/epath"</param>
-        public static string read_value_by_path(string path, string tag_name)
+        public string read_value_by_path(string tag_name)
         {
             string result = string.Empty;
 
-            using (FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read))
+            using (FileStream fs = new FileStream(_path, FileMode.Open, FileAccess.Read))
             {
                 using (XmlReader fr = XmlReader.Create(fs))
                 {
@@ -142,12 +218,12 @@ namespace KPMay
             return result;
         }
 
-        public static DataSet ReadAllValues(string path)
+        public DataSet ReadAllValues()
         {
             DataSet result = new DataSet();
             using (DataSet ds = new DataSet())
             {
-                ds.ReadXml(path);
+                ds.ReadXml(_path);
                 result = ds;
             }
             return result;

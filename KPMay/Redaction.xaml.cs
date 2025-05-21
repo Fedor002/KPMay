@@ -66,8 +66,16 @@ namespace KPMay
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             string newNodeName = ElementTextBox.Text;
-
-            if (!XML.TagExist("system"))
+            if (treeView1.SelectedItem != null)
+            {
+                AD_Tree selectedNode = (AD_Tree)treeView1.SelectedItem;
+                XmlElement newNode = XML.doc.CreateElement("system");
+                newNode.SetAttribute("name", newNodeName);
+                XML.GetNodeByKey(("id", selectedNode.Id)).AppendChild(newNode);
+                XML.SaveXML();
+                MessageBox.Show("Новый узел успешно добавлен!");
+            }
+            else if(!XML.TagExist("system"))
             {
                 XmlElement newNode = XML.doc.CreateElement("system");
                 newNode.SetAttribute("name", newNodeName);
@@ -374,7 +382,26 @@ namespace KPMay
             vectorWindow.Show();
         }
 
+        private void Button_Click_2(object sender, RoutedEventArgs e)
+        {
+            double[,] matrix = new double[2, 2]
+            {
+                { 1, 2 },
+                { 3, 4 }
+            };
 
+            double[,] matrix2 = new double[2, 3]
+            {
+                { 11, 21, 14 },
+                { 35, 14, 15 }
+            };
+            XML.AddMatrixToNode(("matrix",matrix),("id", "0"));
+            XML.AddMatrixToNode(("matrix", matrix2), ("id", "1"));
+            XML.AddMatrixToNode(("matrix", matrix), ("id", "1"));
+            XML.AddUniqueChildToNodeById(("GradeEnterprise", "5"), ("id", "0"));
+            XML.AddUniqueChildToNodeById(("GradeEnterprise", "6"), ("id", "0"));
+            XML.SaveXML();
+        }
     }
 
     // Вспомогательный класс для отображения строк матрицы

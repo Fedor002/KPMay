@@ -16,7 +16,7 @@
             <ComboBoxItem Content="Вид отчета 3"/>
             <ComboBoxItem Content="Вид отчета 4"/>
         </ComboBox>
-        <Button Content="Сформировать Отчет" HorizontalAlignment="Left" Margin="20,390,0,0" VerticalAlignment="Top" Width="140"/>
+        <Button Content="Сформировать Отчет" HorizontalAlignment="Left" Margin="20,390,0,0" VerticalAlignment="Top" Width="140" Click="Button_Click_2"/>
         <Button x:Name="Techno" Content="Оценка технологий" HorizontalAlignment="Left" Margin="363,354,0,0" VerticalAlignment="Top" Width="140" Click="CalcTechno"/>
         <Button Content="Оценка произовдства" HorizontalAlignment="Left" Margin="363,379,0,0" VerticalAlignment="Top" Width="140"/>
         <Button Content="Оценка произовдства" HorizontalAlignment="Left" Margin="363,404,0,0" VerticalAlignment="Top" Width="140"/>
