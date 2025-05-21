@@ -98,6 +98,7 @@
     <Compile Include="CulcSomthing.xaml.cs">
       <DependentUpon>CulcSomthing.xaml</DependentUpon>
     </Compile>
+    <Compile Include="AD\custom_system.cs" />
     <Compile Include="Instractions.xaml.cs">
       <DependentUpon>Instractions.xaml</DependentUpon>
     </Compile>
