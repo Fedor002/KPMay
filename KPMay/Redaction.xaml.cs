@@ -70,7 +70,9 @@ namespace KPMay
             {
                 custom_system selectedNode = (custom_system)treeView1.SelectedItem;
                 XmlElement newNode = XML.doc.CreateElement("system");
-                newNode.SetAttribute("name", newNodeName);
+                XmlNode name = XML.doc.CreateElement("name");
+                name.InnerText = newNodeName;
+                newNode.AppendChild(name);
                 XML.GetNodeByKey(("id", selectedNode.Id)).AppendChild(newNode);
                 XML.SaveXML();
                 MessageBox.Show("Новый узел успешно добавлен!");
@@ -78,7 +80,8 @@ namespace KPMay
             else if(!XML.TagExist("system"))
             {
                 XmlElement newNode = XML.doc.CreateElement("system");
-                newNode.SetAttribute("name", newNodeName);
+                XmlNode name = XML.doc.CreateElement("name");
+                name.InnerText = newNodeName;
                 XML.doc.DocumentElement.AppendChild(newNode);
                 XML.SaveXML();
                 MessageBox.Show("Новый узел успешно добавлен!");
@@ -86,7 +89,8 @@ namespace KPMay
             else
             {
                 XmlElement newNode = XML.doc.CreateElement("subsystem");
-                newNode.SetAttribute("name", newNodeName);
+                XmlNode name = XML.doc.CreateElement("name");
+                name.InnerText = newNodeName;
                 XML.doc.DocumentElement.SelectSingleNode("system").AppendChild(newNode);
                 XML.SaveXML();
                 MessageBox.Show("Новый узел успешно добавлен!");
