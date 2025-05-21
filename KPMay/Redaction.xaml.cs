@@ -65,23 +65,25 @@ namespace KPMay
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            XmlDocument xmlDoc = new XmlDocument();
-            xmlDoc.Load(_system_xml_path); 
-
             string newNodeName = ElementTextBox.Text;
 
-            XmlElement newNode = xmlDoc.CreateElement("node");
-            newNode.SetAttribute("name", newNodeName);
-
-            XmlElement root = xmlDoc.DocumentElement;
-            root.AppendChild(newNode);
-
-            xmlDoc.Save(_system_xml_path); 
-
-            MessageBox.Show("Новый узел успешно добавлен!");
-
+            if (!XML.TagExist("system"))
+            {
+                XmlElement newNode = XML.doc.CreateElement("system");
+                newNode.SetAttribute("name", newNodeName);
+                XML.doc.DocumentElement.AppendChild(newNode);
+                XML.SaveXML();
+                MessageBox.Show("Новый узел успешно добавлен!");
+            }
+            else
+            {
+                XmlElement newNode = XML.doc.CreateElement("subsystem");
+                newNode.SetAttribute("name", newNodeName);
+                XML.doc.DocumentElement.SelectSingleNode("system").AppendChild(newNode);
+                XML.SaveXML();
+                MessageBox.Show("Новый узел успешно добавлен!");
+            }
             ReloadTreeView();
-
             ElementTextBox.Text = string.Empty;
         }
 

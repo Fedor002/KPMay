@@ -10,10 +10,46 @@ using System.Xml.Linq;
 
 namespace KPMay
 {
-    internal class AD_XML
+    public class AD_XML
     {
         private XmlDocument _doc  ;
         private string _path  ;
+
+        public XmlDocument doc
+        {
+            get { return _doc; }
+        }
+        public string path
+        {
+            get { return _path; }
+        }
+
+        public void LoadXML(string path)
+        {
+            _path = path;
+            _doc = new XmlDocument();
+            try
+            {
+                _doc.Load(_path);
+            }
+            catch (Exception ex)
+            {
+                _doc = null;
+                throw new InvalidOperationException($"Ошибка при чтении xml: {path}", ex);
+            }
+        }
+
+        public void SaveXML()
+        {
+            try
+            {
+                _doc.Save(_path);
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException($"Ошибка при сохранении xml: {_path}", ex);
+            }
+        }
         private AD_Tree GetTreeFromXml(XmlNode xmlNode)
         {
             AD_Tree tree = new AD_Tree
@@ -31,18 +67,19 @@ namespace KPMay
 
             return tree;
         }
-        public void LoadXML(string path)
+        /// <summary>
+        /// Проверяет, существует ли тег в XML-файле по указанному пути.
+        /// </summary>
+        /// <returns>Возвращает false, если тег не найден, иначе true.</returns>
+        public bool TagExist(string tag_name)
         {
-            _path = path;
-            _doc = new XmlDocument();
-            try
+            if (_doc.DocumentElement.SelectSingleNode(tag_name) != null)
             {
-                _doc.Load(_path);
+                return true;
             }
-            catch (Exception ex)
+            else
             {
-                _doc = null;
-                throw new InvalidOperationException($"Ошибка при чтении xml: {path}", ex);
+                return false;
             }
         }
 

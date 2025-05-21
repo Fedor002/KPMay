@@ -13,6 +13,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using _io = System.IO;
 using System.Xml;
 
 namespace KPMay
@@ -22,6 +23,7 @@ namespace KPMay
     /// </summary>
     public partial class Subsystem : Window
     {
+        string _system_xml_path = _io.Path.Combine(AppContext.BaseDirectory, "test.xml");
         AD_XML XML = new AD_XML();
         public object SelectedItem { get; set; }
         ObservableCollection<AD_Tree> nodes;
@@ -127,7 +129,7 @@ namespace KPMay
             XmlDocument xmlDoc = new XmlDocument();
             try
             {
-                xmlDoc.Load(@"D:\Downloads\Telegram Desktop\test.xml");
+                xmlDoc.Load(_system_xml_path);
             }
             catch (Exception ex)
             {
@@ -153,7 +155,7 @@ namespace KPMay
             // Сохраняем изменения
             try
             {
-                xmlDoc.Save(@"D:\Downloads\Telegram Desktop\test.xml");
+                xmlDoc.Save(_system_xml_path);
             }
             catch (Exception ex)
             {
@@ -173,7 +175,7 @@ namespace KPMay
             // Это зависит от структуры вашего XML и класса AD_Tree
 
             // Примерная реализация (вам нужно адаптировать под вашу структуру):
-            string xpath = $"//node[@name='{currentContext.Name}']"; // предполагая, что у AD_Tree есть свойство Name
+            string xpath = $"//subsystem[@name='{currentContext.Name}']"; // предполагая, что у AD_Tree есть свойство Name
             return xmlDoc.SelectSingleNode(xpath) ?? xmlDoc.DocumentElement;
         }
 
@@ -184,7 +186,7 @@ namespace KPMay
             if (currentContext == null) return;
 
             // Загружаем XML
-            XML.LoadXML(@"D:\Downloads\Telegram Desktop\test.xml");
+            XML.LoadXML(_system_xml_path);
             AD_Tree fullTree = XML.GetTreeFrom_xml();
 
             // Находим соответствующий узел в новом дереве

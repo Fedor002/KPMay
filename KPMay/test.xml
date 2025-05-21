@@ -1,10 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<root name="Система">
-	<node name="Подсистема 1">
-		<node name="ПодПодсистема 1" />
-		<node name="ПодПодсистема 2">
-			<node name="ПодПодПодсистема" />
-		</node>
-	</node>
-	<node name="Подсистема 2" />
+<root>
+	<!--
+	<system name="Система">
+		<subsystem name="Подсистема 1">
+			<subsystem name="ПодПодсистема 1" />
+			<subsystem name="ПодПодсистема 2">
+				<subsystem name="ПодПодПодсистема" />
+			</subsystem>
+		</subsystem>
+		<subsystem name="Подсистема 2" />
+	</system>
+	-->
 </root>
