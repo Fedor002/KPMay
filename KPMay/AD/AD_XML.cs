@@ -136,7 +136,7 @@ namespace KPMay
 
             foreach (XmlNode child in xmlNode.ChildNodes)
             {
-                if (child.NodeType == XmlNodeType.Element)
+                if (child.NodeType == XmlNodeType.Element && (child.Name == "system" || child.Name == "subsystem"))
                 {
                     tree.Nodes.Add(GetTreeFromXml(child));
                 }

@@ -198,42 +198,81 @@ namespace KPMay
 
         private void CreateSquareMatrixButton_Click(object sender, RoutedEventArgs e)
         {
-            // Получаем названия корневых узлов
-            var rootNames = new List<string>();
-            foreach (AD_Tree node in treeView1.Items)
+            if (treeView1.SelectedItem != null)
             {
-                rootNames.Add(node.Name);
-            }
-
-            int size = rootNames.Count;
-
-            if (size == 0)
-            {
-                MessageBox.Show("Нет корневых узлов в дереве!");
-                return;
-            }
-
-
-            MatrixContext = new SquareMatrix(size, rootNames);
-
-
-            // Заполняем нулями (или другими значениями по умолчанию)
-            for (int i = 0; i < size; i++)
-            {
-                for (int j = 0; j < size; j++)
+                // Получаем названия корневых узлов
+                var rootNames = new List<string>();
+                var selectedOBj = treeView1.SelectedItem as AD_Tree;
+                if (selectedOBj != null && selectedOBj.Nodes != null)
                 {
-                    MatrixContext[i, j] = 0;
+                    foreach (AD_Tree node in selectedOBj.Nodes)
+                    {
+                        rootNames.Add(node.Name);
+                    }
                 }
-            }
 
-            ShowMatrix(MatrixContext);
+                int size = rootNames.Count;
+
+                if (size == 0)
+                {
+                    MessageBox.Show("Нет корневых узлов в дереве!");
+                    return;
+                }
+
+
+                MatrixContext = new SquareMatrix(size, rootNames);
+
+                // Получаем нужный узел matrix (например, по id родителя)
+                XmlNode matrixNode = XML.GetNodeByKey(("id", "0")).SelectSingleNode("matrix");
+
+                if (matrixNode != null)
+                {
+                    var rows = matrixNode.SelectNodes("row");
+                    int rowCount = rows.Count;
+                    int colCount = rows[0].SelectNodes("cell").Count;
+
+                    double[,] matrixData = new double[rowCount, colCount];
+
+                    for (int i = 0; i < rowCount; i++)
+                    {
+                        var cells = rows[i].SelectNodes("cell");
+                        for (int j = 0; j < colCount; j++)
+                        {
+                            matrixData[i, j] = double.Parse(cells[j].InnerText, System.Globalization.CultureInfo.InvariantCulture);
+                        }
+                    }
+
+                    // Создаём SquareMatrix
+                    for (int i = 0; i < rowCount; i++)
+                        for (int j = 0; j < colCount; j++)
+                            MatrixContext[i, j] = matrixData[i, j];
+                }
+                else
+                {
+                    MessageBox.Show("Узел <matrix> не найден.");
+                }
+
+
+                // Заполняем нулями (или другими значениями по умолчанию)
+                /*for (int i = 0; i < size; i++)
+                {
+                    for (int j = 0; j < size; j++)
+                    {
+                        MatrixContext[i, j] = 0;
+                    }
+                }*/
+
+                ShowMatrix(MatrixContext);
+            }
         }
 
         private void ShowMatrix(SquareMatrix matrix)
         {
             // Получаем названия корневых узлов
             var rootNames = new List<string>();
-            foreach (AD_Tree node in treeView1.Items)
+            var selectedOBj = treeView1.SelectedItem as AD_Tree;
+
+            foreach (AD_Tree node in selectedOBj.Nodes)
             {
                 rootNames.Add(node.Name); // Используем свойство Name из AD_Tree
             }
@@ -320,12 +359,15 @@ namespace KPMay
             };
 
             matrixWindow.Show();
+
         }
 
         private void ShowVectorInput(SquareMatrix matrix)
         {
             var rootNames = new List<string>();
-            foreach (AD_Tree node in treeView1.Items)
+            var selectedOBj = treeView1.SelectedItem as AD_Tree;
+            XML.AddMatrixToNode(("matrix", matrix._matrix), ("id", "0"));
+            foreach (AD_Tree node in selectedOBj.Nodes)
             {
                 rootNames.Add(node.Name);
             }
@@ -384,11 +426,7 @@ namespace KPMay
 
         private void Button_Click_2(object sender, RoutedEventArgs e)
         {
-            double[,] matrix = new double[2, 2]
-            {
-                { 1, 2 },
-                { 3, 4 }
-            };
+            double[,] matrix = MatrixContext._matrix;
 
             double[,] matrix2 = new double[2, 3]
             {
@@ -396,9 +434,9 @@ namespace KPMay
                 { 35, 14, 15 }
             };
             XML.AddMatrixToNode(("matrix",matrix),("id", "0"));
-            XML.AddMatrixToNode(("matrix", matrix2), ("id", "1"));
-            XML.AddMatrixToNode(("matrix", matrix), ("id", "1"));
-            XML.AddUniqueChildToNodeById(("GradeEnterprise", "5"), ("id", "0"));
+            //XML.AddMatrixToNode(("matrix", matrix2), ("id", "1"));
+            //XML.AddMatrixToNode(("matrix", matrix), ("id", "1"));
+            //XML.AddUniqueChildToNodeById(("GradeEnterprise", "5"), ("id", "0"));
             XML.AddUniqueChildToNodeById(("GradeEnterprise", "6"), ("id", "0"));
             XML.SaveXML();
         }

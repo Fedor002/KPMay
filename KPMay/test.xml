@@ -1,12 +1,33 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
-	<system name="Система" id ="0">
-		<subsystem name="Подсистема 1" id ="1">
-			<subsystem name="ПодПодсистема 1" id ="2" />
-			<subsystem name="ПодПодсистема 2" id ="3">
-				<subsystem name="ПодПодПодсистема" id ="4" />
-			</subsystem>
-		</subsystem>
-		<subsystem name="Подсистема 2" id ="5" />
-	</system>
+  <system name="Система" id="0">
+    <subsystem name="Подсистема 1" id="1">
+      <subsystem name="ПодПодсистема 1" id="2" />
+      <subsystem name="ПодПодсистема 2" id="3">
+        <subsystem name="ПодПодПодсистема" id="4" />
+      </subsystem>
+      <matrix>
+        <row>
+          <cell>1</cell>
+          <cell>2</cell>
+        </row>
+        <row>
+          <cell>3</cell>
+          <cell>4</cell>
+        </row>
+      </matrix>
+    </subsystem>
+    <subsystem name="Подсистема 2" id="5" />
+    <matrix>
+      <row>
+        <cell>1</cell>
+        <cell>2</cell>
+      </row>
+      <row>
+        <cell>3</cell>
+        <cell>4</cell>
+      </row>
+    </matrix>
+    <GradeEnterprise>6</GradeEnterprise>
+  </system>
 </root>
