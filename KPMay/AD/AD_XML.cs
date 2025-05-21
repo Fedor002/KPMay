@@ -59,14 +59,29 @@ namespace KPMay
         {
             try
             { 
-                return _doc.SelectSingleNode($"//*[@{Key.name}='{Key.value}']"); 
+                return _doc.SelectSingleNode($"//*[@{Key.name}={Key.value}]"); 
             }
             catch
             {
-                throw new Exception($"Узел <c атрибутом{Key.name}='{Key.value}'> не найден в XML.");
+                throw new Exception($"Узел <c атрибутом{Key.name}={Key.value}> не найден в XML.");
             }          
         }
-
+        
+        public XmlNode GetChildNode(XmlNode parent, string child_name)
+        {
+            return parent.SelectSingleNode(child_name);
+        }
+        public string GetNodeValue(XmlNode node)
+        {
+            if (node != null)
+            {
+                return node.InnerText;
+            }
+            else
+            {
+                return null;
+            }
+        }
         /// <summary>
         /// Метод добавляет узел в XML-файл для узла с указанным атрибутом и значением, если потомок уже существует, то его заменят.
         /// </summary>
@@ -74,9 +89,9 @@ namespace KPMay
         /// <param name="id">Кортеж из названия узла и значения наприимер.("id", "0")</param>
         public void AddUniqueChildToNodeById((string name, string innerText) node, (string name, string value) id)
         {
-            XmlNode Parent = _doc.SelectSingleNode($"//*[@{id.name}='{id.value}']");
+            XmlNode Parent = _doc.SelectSingleNode($"//*[@{id.name}={id.value}]");
             if (Parent == null)
-                throw new Exception($"Узел <c атрибутом{id.name}='{id.value}'> не найден в XML.");
+                throw new Exception($"Узел <c атрибутом{id.name}={id.value}> не найден в XML.");
 
             XmlElement child = _doc.CreateElement(node.name);
             child.InnerText = node.innerText;
@@ -98,11 +113,13 @@ namespace KPMay
             int rows = node.matrix.GetLength(0);
             int cols = node.matrix.GetLength(1);
 
-            XmlNode Parent = _doc.SelectSingleNode($"//*[@{id.name}='{id.value}']");
+            XmlNode Parent = _doc.SelectSingleNode($"//*[@{id.name}={id.value}]");
             if (Parent == null)
-                throw new Exception($"Узел <c атрибутом{id.name}='{id.value}'> не найден в XML.");
+                throw new Exception($"Узел <c атрибутом{id.name}={id.value}> не найден в XML.");
 
             XmlElement matrix_e = _doc.CreateElement(node.name);
+            matrix_e.SetAttribute("rows", rows.ToString());
+            matrix_e.SetAttribute("cols", cols.ToString());
 
             for (int i = 0; i < rows; i++)
             {
@@ -125,6 +142,64 @@ namespace KPMay
                 Parent.AppendChild(matrix_e);
             }
         }
+
+        public double[,] ConvertNodeToMatrix(XmlNode parent, string node_name)
+        {
+            int rows = 0;
+            int cols = 0;
+            double[,] matrix;
+            XmlNode matrix_node;
+            if (parent == null)
+            {
+                throw new Exception($"Узел с атрибутом {parent.Name} не найден.");
+            }
+            else if (parent.SelectSingleNode(node_name) == null)
+            {
+                return null;
+            }
+            try 
+            {
+                rows = int.Parse(parent.SelectSingleNode(node_name).Attributes["rows"].Value);
+            }
+            catch(Exception ex)
+            {
+                throw new Exception($"не найден атрибут rows, возможно файл повреждён. {ex}");
+            }
+            try
+            {
+                cols = int.Parse(parent.SelectSingleNode(node_name).Attributes["cols"].Value);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"не найден атрибут cols, возможно файл повреждён. {ex}");
+            }
+
+            matrix = new double[rows, cols];
+            matrix_node = parent.SelectSingleNode(node_name);
+
+            XmlNodeList row_nodes = matrix_node.SelectNodes("row");
+
+            for (int i = 0; i < rows; i++)
+            {
+                XmlNodeList cell_nodes = row_nodes[i].SelectNodes("cell");
+
+                for (int j = 0; j < cols; j++)
+                {
+                    try 
+                    {
+                        double cell_value = double.Parse(cell_nodes[j].InnerText, System.Globalization.NumberStyles.Float,
+                                         System.Globalization.CultureInfo.InvariantCulture);
+                        matrix[i, j] = cell_value;
+                    }
+                    catch(Exception ex)
+                    {
+                        throw new Exception($"Ошибка в ячейке [{i},{j}]: {ex}");
+                    }
+                }
+            }
+            return matrix;
+        }
+
 
         private AD_Tree GetTreeFromXml(XmlNode xmlNode)
         {
@@ -227,6 +302,37 @@ namespace KPMay
                 result = ds;
             }
             return result;
+        }
+
+        //--------------------------------------------не универсальные методы-----------------------------------------------------------------------------------------
+        private custom_system GetSystemFromXml(XmlNode xmlNode)
+        {
+            custom_system tree = new custom_system
+            {
+                Name = GetNodeValue(GetChildNode(xmlNode, "name")),
+                Id = xmlNode.Attributes?["id"]?.Value ?? string.Empty,
+                enterprise_matrix = ConvertNodeToMatrix(xmlNode, "enterprise_matrix"),
+                technology_matrix = ConvertNodeToMatrix(xmlNode, "technology_matrix"),
+                integration_matrix = ConvertNodeToMatrix(xmlNode, "integration_matrix"),
+                enterprise_grade = Convert.ToInt32(GetNodeValue(GetChildNode(xmlNode, "enterprise_grade"))),
+                technology_grade = Convert.ToInt32(GetNodeValue(GetChildNode(xmlNode, "technology_grade"))),
+                integration_grade = Convert.ToInt32(GetNodeValue(GetChildNode(xmlNode, "integration_grade")))
+            };
+
+            foreach (XmlNode child in xmlNode.ChildNodes)
+            {
+                if (child.NodeType == XmlNodeType.Element)
+                {
+                    tree.Nodes.Add(GetSystemFromXml(child));
+                }
+            }
+
+            return tree;
+        }
+        public custom_system GetSystemFromXml()
+        {
+            custom_system tree = GetSystemFromXml(_doc.DocumentElement);
+            return tree;
         }
     }
 }

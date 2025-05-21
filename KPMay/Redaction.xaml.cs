@@ -30,7 +30,7 @@ namespace KPMay
     {
         string _system_xml_path = _io.Path.Combine(AppContext.BaseDirectory, "test.xml");
         AD_XML XML = new AD_XML();
-        ObservableCollection<AD_Tree> nodes;
+        ObservableCollection<custom_system> nodes;
         private Dictionary<string, double> _vectorValues;
         private SquareMatrix MatrixContext;
         public Redaction()
@@ -39,7 +39,7 @@ namespace KPMay
 
             XML.LoadXML(_system_xml_path);
 
-            AD_Tree tree = XML.GetTreeFrom_xml();
+            custom_system tree = XML.GetSystemFromXml();
             nodes = tree.Nodes;
             treeView1.ItemsSource = nodes;
         }
@@ -68,7 +68,7 @@ namespace KPMay
             string newNodeName = ElementTextBox.Text;
             if (treeView1.SelectedItem != null)
             {
-                AD_Tree selectedNode = (AD_Tree)treeView1.SelectedItem;
+                custom_system selectedNode = (custom_system)treeView1.SelectedItem;
                 XmlElement newNode = XML.doc.CreateElement("system");
                 newNode.SetAttribute("name", newNodeName);
                 XML.GetNodeByKey(("id", selectedNode.Id)).AppendChild(newNode);
@@ -97,9 +97,7 @@ namespace KPMay
 
         private void ReloadTreeView()
         {
-            XML.LoadXML(_system_xml_path);
-
-            AD_Tree tree = XML.GetTreeFrom_xml();
+            custom_system tree = XML.GetSystemFromXml();
             nodes = tree.Nodes;
 
             treeView1.ItemsSource = null; 

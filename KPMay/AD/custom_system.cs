@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace KPMay
 {
-    internal class custom_system
+    public class custom_system
     {
         private string _name { get; set; }
         private ObservableCollection<custom_system> _children { get; set; } = new ObservableCollection<custom_system>();
