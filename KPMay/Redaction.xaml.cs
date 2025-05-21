@@ -393,11 +393,10 @@ namespace KPMay
                 { 11, 21, 14 },
                 { 35, 14, 15 }
             };
-            XML.AddMatrixToNode(("matrix",matrix),("id", "0"));
-            XML.AddMatrixToNode(("matrix", matrix2), ("id", "1"));
-            XML.AddMatrixToNode(("matrix", matrix), ("id", "1"));
-            XML.AddUniqueChildToNodeById(("GradeEnterprise", "5"), ("id", "0"));
-            XML.AddUniqueChildToNodeById(("GradeEnterprise", "6"), ("id", "0"));
+            XML.AddMatrixToNode(("enterprise_matrix", matrix),("id", "0"));
+            XML.AddMatrixToNode(("integration_matrix", matrix2), ("id", "0"));
+            XML.AddUniqueChildToNodeById(("enterprise_grade", "5"), ("id", "0"));
+            XML.AddUniqueChildToNodeById(("technology_grade", "6"), ("id", "0"));
             XML.SaveXML();
         }
     }
