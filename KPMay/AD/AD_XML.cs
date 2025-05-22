@@ -283,6 +283,32 @@ namespace KPMay
             return tree;
         }
 
+        public List<string> GetAllAttributeValues(string[] tag_names, string attribute_name)
+        {
+            List<XmlNode> _general = new List<XmlNode>();
+            List<string> _result = new List<string>();
+
+            foreach (string tag in tag_names)
+            {
+                XmlNodeList nodes = _doc.GetElementsByTagName(tag);
+                foreach (XmlNode node in nodes)
+                {
+                    _general.Add(node);
+                }
+            }
+            foreach (XmlNode node in _general)
+            {
+                foreach (XmlAttribute attribute in node.Attributes)
+                {
+                    if (attribute.Name == attribute_name)
+                    {
+                        _result.Add(attribute.Value);
+                    }
+                }
+            }
+            return _result;
+        }
+
         /// <summary>
         /// Метод читает значение первого попавшегося тега из XML-файла по указанному пути, подходит для xml с уникальными тегами.
         /// </summary>
@@ -345,7 +371,6 @@ namespace KPMay
             }
             return result;
         }
-
         //--------------------------------------------не универсальные методы-----------------------------------------------------------------------------------------
         private custom_system GetSystemFromXml(XmlNode xmlNode)
         {
@@ -375,6 +400,6 @@ namespace KPMay
         {
             custom_system tree = GetSystemFromXml(_doc.DocumentElement);
             return tree;
-        }
+        } 
     }
 }

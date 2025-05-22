@@ -25,6 +25,18 @@ namespace KPMay
             }
         }
 
-
+        public void CmdExecuteNonQuery(string path, string dbName, string cmd)
+        {
+            string _path = AD_General.ConvertEnviromentPatToPath(path) + "\\" + dbName + ".db";
+            using (SQLiteConnection connection = new SQLiteConnection($"Data Source={_path};Version=3;"))
+            {
+                connection.Open();
+                using (SQLiteCommand _cmd = new SQLiteCommand(cmd, connection))
+                {
+                    _cmd.ExecuteNonQuery();
+                }
+            }
+        }
+//-------------------------------------------------------------------------------------------------------------------------------------
     }
 }

@@ -41,6 +41,7 @@ namespace KPMay
 
             custom_system tree = XML.GetSystemFromXml();
             nodes = tree.Nodes;
+            List<string> ids = XML.GetAllAttributeValues(new[] { "system", "subsystem" },"id");
             treeView1.ItemsSource = nodes;
         }
 
