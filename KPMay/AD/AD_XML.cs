@@ -77,11 +77,11 @@ namespace KPMay
         {
             try
             { 
-                return _doc.SelectSingleNode($"//*[@{Key.name}={Key.value}]"); 
+                return _doc.SelectSingleNode($"//*[@{Key.name}=\"{Key.value}\"]"); 
             }
             catch
             {
-                throw new Exception($"Узел <c атрибутом{Key.name}={Key.value}> не найден в XML.");
+                throw new Exception($"Узел <c атрибутом{Key.name}=\"{Key.value}\"> не найден в XML.");
             }          
         }
         
@@ -146,9 +146,9 @@ namespace KPMay
         /// <param name="id">Кортеж из названия узла и значения наприимер.("id", "0")</param>
         public void AddUniqueChildToNodeById((string name, string innerText) node, (string name, string value) id)
         {
-            XmlNode Parent = _doc.SelectSingleNode($"//*[@{id.name}={id.value}]");
+            XmlNode Parent = _doc.SelectSingleNode($"//*[@{id.name}=\"{id.value}\"]");
             if (Parent == null)
-                throw new Exception($"Узел <c атрибутом{id.name}={id.value}> не найден в XML.");
+                throw new Exception($"Узел <c атрибутом{id.name}=\"{id.value}\"> не найден в XML.");
 
             XmlElement child = _doc.CreateElement(node.name);
             child.InnerText = node.innerText;
@@ -185,9 +185,9 @@ namespace KPMay
             int rows = node.matrix.GetLength(0);
             int cols = node.matrix.GetLength(1);
 
-            XmlNode Parent = _doc.SelectSingleNode($"//*[@{id.name}={id.value}]");
+            XmlNode Parent = _doc.SelectSingleNode($"//*[@{id.name}=\"{id.value}\"]");
             if (Parent == null)
-                throw new Exception($"Узел <c атрибутом{id.name}={id.value}> не найден в XML.");
+                throw new Exception($"Узел <c атрибутом{id.name}=\" {id.value} \"> не найден в XML.");
 
             XmlElement matrix_e = _doc.CreateElement(node.name);
             matrix_e.SetAttribute("rows", rows.ToString());
