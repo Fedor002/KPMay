@@ -34,7 +34,7 @@ namespace KPMay
         private Dictionary<string, double> _vectorValues;
         private SquareMatrix MatrixContext;
         private CustomTags ct = new CustomTags();
-        private int newID = 10;
+
         public Redaction()
         {
             InitializeComponent();
@@ -45,6 +45,12 @@ namespace KPMay
             nodes = tree.Nodes;
             List<string> ids = XML.GetAllAttributeValues(new[] { "system", "subsystem" },"id");
             treeView1.ItemsSource = nodes;
+            foreach (var item in treeView1.Items)
+            {
+                var tvi = treeView1.ItemContainerGenerator.ContainerFromItem(item) as TreeViewItem;
+                if (tvi != null)
+                    tvi.IsExpanded = true; // или true, если нужно развернуть
+            }
         }
 
         // Вспомогательный класс для элемента вектора
@@ -69,42 +75,45 @@ namespace KPMay
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             string newNodeName = ElementTextBox.Text;
+            List<string> ids = XML.GetAllAttributeValues(new[] { ct.system, ct.subsystem }, ct.id);
+            string newId = Guid.NewGuid().ToString();
+            while (ids.Contains(newId))
+            {
+                newId = Guid.NewGuid().ToString();
+            }
             if (treeView1.SelectedItem != null)
             {
                 custom_system selectedNode = (custom_system)treeView1.SelectedItem;
                 XmlElement newNode = XML.doc.CreateElement(ct.subsystem);
                 XmlNode name = XML.doc.CreateElement(ct.name);
                 name.InnerText = newNodeName;
-                List<string> ids = XML.GetAllAttributeValues(new[] { "system", "subsystem" }, "id");
-                string newId = Guid.NewGuid().ToString();
-                while (ids.Contains(newId)) {
-                    newId = Guid.NewGuid().ToString();
-                }
-                newID++;
-                XML.SetAttributeToElement(newNode, (ct.id, newID.ToString()));
+
+                XML.SetAttributeToElement(newNode, (ct.id, newId));
 
                 newNode.AppendChild(name);
-                var tst1 = XML.GetNodeByKey((ct.id, selectedNode.Id));
-                XML.SaveXML();
-                tst1.AppendChild(newNode);
+                XML.GetNodeByKey((ct.id, selectedNode.Id)).AppendChild(newNode);
                 XML.SaveXML();
                 MessageBox.Show("Новый узел успешно добавлен!");
             }
-            else if(!XML.TagExist("system"))
+            else if(!XML.TagExist(ct.system))
             {
-                XmlElement newNode = XML.doc.CreateElement("system");
-                XmlNode name = XML.doc.CreateElement("name");
+                XmlElement newNode = XML.doc.CreateElement(ct.system);
+                XmlNode name = XML.doc.CreateElement(ct.name);
                 name.InnerText = newNodeName;
+                XML.SetAttributeToElement(newNode, (ct.id, "0"));
+                newNode.AppendChild(name);
                 XML.doc.DocumentElement.AppendChild(newNode);
                 XML.SaveXML();
                 MessageBox.Show("Новый узел успешно добавлен!");
             }
             else
             {
-                XmlElement newNode = XML.doc.CreateElement("subsystem");
-                XmlNode name = XML.doc.CreateElement("name");
+                XmlElement newNode = XML.doc.CreateElement(ct.subsystem);
+                XmlNode name = XML.doc.CreateElement(ct.name);
                 name.InnerText = newNodeName;
-                XML.doc.DocumentElement.SelectSingleNode("system").AppendChild(newNode);
+                 XML.SetAttributeToElement(newNode, (ct.id, newId));
+                newNode.AppendChild(name);
+                XML.doc.DocumentElement.SelectSingleNode(ct.system).AppendChild(newNode);
                 XML.SaveXML();
                 MessageBox.Show("Новый узел успешно добавлен!");
             }
@@ -118,7 +127,13 @@ namespace KPMay
             nodes = tree.Nodes;
 
             treeView1.ItemsSource = null; 
-            treeView1.ItemsSource = nodes; 
+            treeView1.ItemsSource = nodes;
+            foreach (var item in treeView1.Items)
+            {
+                var tvi = treeView1.ItemContainerGenerator.ContainerFromItem(item) as TreeViewItem;
+                if (tvi != null)
+                    tvi.IsExpanded = true; // или true, если нужно развернуть
+            }
         }
 
         private void Grid_MouseLeftButtonDown(object sender, RoutedEventArgs e)
