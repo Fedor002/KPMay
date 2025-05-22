@@ -34,6 +34,7 @@ namespace KPMay
         private Dictionary<string, double> _vectorValues;
         private SquareMatrix MatrixContext;
         private CustomTags ct = new CustomTags();
+        private int newID = 10;
         public Redaction()
         {
             InitializeComponent();
@@ -74,8 +75,18 @@ namespace KPMay
                 XmlElement newNode = XML.doc.CreateElement(ct.subsystem);
                 XmlNode name = XML.doc.CreateElement(ct.name);
                 name.InnerText = newNodeName;
+                List<string> ids = XML.GetAllAttributeValues(new[] { "system", "subsystem" }, "id");
+                string newId = Guid.NewGuid().ToString();
+                while (ids.Contains(newId)) {
+                    newId = Guid.NewGuid().ToString();
+                }
+                newID++;
+                XML.SetAttributeToElement(newNode, (ct.id, newID.ToString()));
+
                 newNode.AppendChild(name);
-                XML.GetNodeByKey((ct.id, selectedNode.Id)).AppendChild(newNode);
+                var tst1 = XML.GetNodeByKey((ct.id, selectedNode.Id));
+                XML.SaveXML();
+                tst1.AppendChild(newNode);
                 XML.SaveXML();
                 MessageBox.Show("Новый узел успешно добавлен!");
             }
