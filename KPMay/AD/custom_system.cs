@@ -69,4 +69,58 @@ namespace KPMay
             set { _integration_grade = value; }
         }
     }
+    public class CustomTags 
+    {
+        private string _enterprise_matrix = "enterprise_matrix";
+        private string _technology_matrix = "technology_matrix";
+        private string _integration_matrix = "integration_matrix";
+        private string _enterprise_grade = "enterprise_grade";
+        private string _technology_grade = "technology_grade";
+        private string _integration_grade = "integration_grade";
+        private string _system = "system";
+        private string _subsystem = "subsystem";
+        private string _id = "id";
+        private string _name = "name";
+
+        public string enterprise_matrix
+        {
+            get { return _enterprise_matrix; }
+        }
+        public string technology_matrix
+        {
+            get { return _technology_matrix; }
+        }
+        public string integration_matrix
+        {
+            get { return _integration_matrix; }
+        }
+        public string enterprise_grade
+        {
+            get { return _enterprise_grade; }
+        }
+        public string technology_grade
+        {
+            get { return _technology_grade; }
+        }
+        public string integration_grade
+        {
+            get { return _integration_grade; }
+        }
+        public string system
+        {
+            get { return _system; }
+        }
+        public string subsystem
+        {
+            get { return _subsystem; }
+        }
+        public string id
+        {
+            get { return _id; }
+        }
+        public string name
+        {
+            get { return _name; }
+        }
+    }
 }

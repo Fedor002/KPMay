@@ -33,6 +33,7 @@ namespace KPMay
         ObservableCollection<custom_system> nodes;
         private Dictionary<string, double> _vectorValues;
         private SquareMatrix MatrixContext;
+        private CustomTags ct = new CustomTags();
         public Redaction()
         {
             InitializeComponent();
@@ -70,11 +71,11 @@ namespace KPMay
             if (treeView1.SelectedItem != null)
             {
                 custom_system selectedNode = (custom_system)treeView1.SelectedItem;
-                XmlElement newNode = XML.doc.CreateElement("system");
-                XmlNode name = XML.doc.CreateElement("name");
+                XmlElement newNode = XML.doc.CreateElement(ct.subsystem);
+                XmlNode name = XML.doc.CreateElement(ct.name);
                 name.InnerText = newNodeName;
                 newNode.AppendChild(name);
-                XML.GetNodeByKey(("id", selectedNode.Id)).AppendChild(newNode);
+                XML.GetNodeByKey((ct.id, selectedNode.Id)).AppendChild(newNode);
                 XML.SaveXML();
                 MessageBox.Show("Новый узел успешно добавлен!");
             }
@@ -322,13 +323,21 @@ namespace KPMay
         private void ShowVectorInput(SquareMatrix matrix)
         {
             var rootNames = new List<string>();
-            foreach (custom_system node in treeView1.Items)
+            custom_system selectedNode = (custom_system)treeView1.SelectedItem;
+            foreach (custom_system node in selectedNode.Nodes)
             {
                 rootNames.Add(node.Name);
             }
 
             // Инициализация вектора (значения по умолчанию 0)
-            _vectorValues = rootNames.ToDictionary(name => name, _ => 0.0);
+            _vectorValues = new Dictionary<string, double>();
+            foreach (custom_system node in selectedNode.Nodes)
+            {
+                double value = 0.0;
+                if (!string.IsNullOrEmpty(Convert.ToString(node.enterprise_grade)))
+                    value = node.enterprise_grade;
+                _vectorValues[node.Name] = value;
+            }
 
             var grid = new DataGrid
             {
@@ -396,6 +405,7 @@ namespace KPMay
             XML.AddMatrixToNode(("integration_matrix", matrix2), ("id", "0"));
             XML.AddUniqueChildToNodeById(("enterprise_grade", "5"), ("id", "0"));
             XML.AddUniqueChildToNodeById(("technology_grade", "6"), ("id", "0"));
+            XML.AddUniqueChildToNodeById(("enterprise_grade", "6"), ("id", "1"));
             XML.SaveXML();
             ReloadTreeView();
         }
