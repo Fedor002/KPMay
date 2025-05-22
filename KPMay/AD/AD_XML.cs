@@ -25,6 +25,23 @@ namespace KPMay
             get { return _path; }
         }
 
+        public void CreateXML(string path, string root_name = "root")
+        {
+            _path = path;
+            _doc = new XmlDocument();
+            XmlDeclaration declaration = _doc.CreateXmlDeclaration("1.0", "utf-8", null);
+            _doc.AppendChild(declaration);
+            XmlElement root = _doc.CreateElement(root_name);
+            _doc.AppendChild(root);
+            try
+            {
+                _doc.Save(_path);
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException($"Ошибка при создании файла: {path}", ex);
+            }
+        }
         public void LoadXML(string path)
         {
             _path = path;
@@ -82,6 +99,36 @@ namespace KPMay
             {
                 return null;
             }
+        }
+
+        /// <summary>
+        /// Метод преобразует XmlNode в XmlElement, если это возможно.
+        /// </summary>
+        public XmlElement ConvertNodeToElement(XmlNode node)
+        { 
+            if (node.NodeType == XmlNodeType.Element)
+            {
+                return (XmlElement)node;
+            }
+            else
+            {
+                throw new Exception($"Узел {node.Name} не является элементом XML.");
+            }
+        }
+
+        public void AddCDataToNode(XmlElement node, string value)
+        {
+            XmlCDataSection cdata = _doc.CreateCDataSection(value);
+            node.AppendChild(cdata);
+        }
+        /// <summary>
+        /// Метод создает атрибут для элемента, если его нет, иначе устанавливает новое значение.
+        /// </summary>
+        /// <param name="node">Элемент, которому нужно установить значение, элемент XmlNode можно привести в XmlElement методом ConvertNodeToElement</param>
+        /// <param name="attribute">Кортеж из названия атрибута и значения, наприимер.("id", "0")</param>
+        public void SetAttributeToElement(XmlElement node,(string name, string value) attribute)
+        {
+            node.SetAttribute(attribute.name, attribute.value);
         }
         /// <summary>
         /// Метод добавляет узел в XML-файл для узла с указанным атрибутом и значением, если потомок уже существует, то его заменят.
