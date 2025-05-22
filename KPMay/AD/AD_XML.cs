@@ -101,6 +101,15 @@ namespace KPMay
             }
         }
 
+        public void SetNodeValue(XmlNode node, string value)
+        {
+            if (node != null)
+            {
+                node.InnerText = value;
+            }
+            else{}
+        }
+
         /// <summary>
         /// Метод преобразует XmlNode в XmlElement, если это возможно.
         /// </summary>
@@ -155,7 +164,22 @@ namespace KPMay
             }
         }
 
+        public void AddOrReplaceChildToNode((string name, string innerText) node, XmlNode parent)
+        {
 
+            XmlElement child = _doc.CreateElement(node.name);
+            child.InnerText = node.innerText;
+
+            XmlNode check_child_exist = parent.SelectSingleNode(node.name);
+            if (check_child_exist != null)
+            {
+                parent.ReplaceChild(child, check_child_exist);
+            }
+            else
+            {
+                parent.AppendChild(child);
+            }
+        }
         public void AddMatrixToNode((string name,double[,] matrix) node, (string name, string value) id)
         {
             int rows = node.matrix.GetLength(0);
