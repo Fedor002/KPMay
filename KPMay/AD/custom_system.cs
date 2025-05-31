@@ -15,9 +15,9 @@ namespace KPMay
         private double[,] _enterprise_matrix;
         private double[,] _technology_matrix;
         private double[,] _integration_matrix;
-        private int _enterprise_grade;
-        private int _technology_grade;
-        private int _integration_grade;
+        private double _enterprise_grade;
+        private double _technology_grade;
+        private double _integration_grade;
 
         public string Name
         {
@@ -51,19 +51,19 @@ namespace KPMay
             set { _integration_matrix = value; }
         }
 
-        public int enterprise_grade
+        public double enterprise_grade
         {
             get { return _enterprise_grade; }
             set { _enterprise_grade = value; }
         }
 
-        public int technology_grade
+        public double technology_grade
         {
             get { return _technology_grade; }
             set { _technology_grade = value; }
         }
 
-        public int integration_grade
+        public double integration_grade
         {
             get { return _integration_grade; }
             set { _integration_grade = value; }

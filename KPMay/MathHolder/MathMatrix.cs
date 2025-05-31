@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Media3D;
-using KPMay.Math;
+using KPMay;
 
-namespace KPMay
+namespace KPMay.MathHolder
 {
     public class MathMatrix
     {
@@ -42,7 +42,7 @@ namespace KPMay
                 sum += element/n_i;
             }
 
-            return sum/(_matrix.Size * _matrix.Size);
+            return sum /(_matrix.Size * _matrix.Size);
 
         }
 

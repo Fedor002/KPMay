@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KPMay.Math
+namespace KPMay.MathHolder
 {
     public class SquareMatrix
     {

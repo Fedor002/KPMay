@@ -17,7 +17,7 @@ using System.Windows.Shapes;
 using System.Xml;
 using _io = System.IO;
 using System.Xml.Linq;
-using KPMay.Math;
+using KPMay.MathHolder;
 
 namespace KPMay
 {

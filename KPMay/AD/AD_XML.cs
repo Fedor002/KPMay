@@ -405,9 +405,9 @@ namespace KPMay
                 enterprise_matrix = ConvertNodeToMatrix(GetChildNode(xmlNode, "enterprise_matrix")),
                 technology_matrix = ConvertNodeToMatrix(GetChildNode(xmlNode, "technology_matrix")),
                 integration_matrix = ConvertNodeToMatrix(GetChildNode(xmlNode, "integration_matrix")),
-                enterprise_grade = Convert.ToInt32(GetNodeValue(GetChildNode(xmlNode, "enterprise_grade"))),
-                technology_grade = Convert.ToInt32(GetNodeValue(GetChildNode(xmlNode, "technology_grade"))),
-                integration_grade = Convert.ToInt32(GetNodeValue(GetChildNode(xmlNode, "integration_grade")))
+                enterprise_grade = Convert.ToDouble(GetNodeValue(GetChildNode(xmlNode, "enterprise_grade"))),
+                technology_grade = Convert.ToDouble(GetNodeValue(GetChildNode(xmlNode, "technology_grade"))),
+                integration_grade = Convert.ToDouble(GetNodeValue(GetChildNode(xmlNode, "integration_grade")))
             };
 
             foreach (XmlNode child in xmlNode.ChildNodes)
