@@ -70,6 +70,12 @@ namespace KPMay
             MathMatrix calc = new MathMatrix(MatrixContext, _vectorValues);
 
             double N = calc.MakeTheFunny();
+
+            custom_system selectedNode = (custom_system)treeView1.SelectedItem;
+
+            XML.AddUniqueChildToNodeById(("enterprise_grade", N.ToString()), ("id", selectedNode.Id));
+            XML.SaveXML();
+            ReloadTreeView();
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
