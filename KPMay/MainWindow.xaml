@@ -7,19 +7,34 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-        <TextBox HorizontalAlignment="Left" Height="25" Margin="27,53,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="180"/>
-        <TextBox HorizontalAlignment="Left" Height="25" Margin="27,114,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="180"/>
-        <TextBox HorizontalAlignment="Left" Height="25" Margin="27,177,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="180"/>
-        <TextBox HorizontalAlignment="Left" Height="25" Margin="27,231,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="180"/>
-        <TextBox HorizontalAlignment="Left" Height="25" Margin="27,287,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="180"/>
-        <Label Content="ФИО входящего" HorizontalAlignment="Left" Margin="27,27,0,0" VerticalAlignment="Top" Cursor=""/>
-        <Label Content="Должность" HorizontalAlignment="Left" Margin="27,88,0,0" VerticalAlignment="Top"/>
-        <Label Content="Организация" HorizontalAlignment="Left" Margin="27,150,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.603,2.426"/>
-        <Label Content="Путь" HorizontalAlignment="Left" Margin="27,0,0,0" VerticalAlignment="Center" RenderTransformOrigin="0.603,2.426"/>
-        <Label Content="Класс ВВСТ" HorizontalAlignment="Left" Margin="27,261,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.603,2.426"/>
-        <Button Content="Создать новый" HorizontalAlignment="Left" Margin="27,327,0,0" VerticalAlignment="Top" Width="99"/>
-        <Button Content="Загрузить" HorizontalAlignment="Left" Margin="153,327,0,0" VerticalAlignment="Top" Width="71"/>
-        <Button Content="Перейти к работе" HorizontalAlignment="Left" Margin="241,327,0,0" VerticalAlignment="Top" Width="103" Click="Button_Click"/>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <TextBox HorizontalAlignment="Left" Height="25" Margin="27,53,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="180" local:TBHelper.Placeholder="ФИО" Grid.Row="1"/>
+        <TextBox HorizontalAlignment="Left" Height="25" Margin="27,114,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="180" Grid.Row="1"/>
+        <TextBox HorizontalAlignment="Left" Height="25" Margin="27,177,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="180" Grid.Row="1"/>
+        <TextBox HorizontalAlignment="Left" Height="25" Margin="27,231,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="180" Grid.Row="1"/>
+        <TextBox HorizontalAlignment="Left" Height="25" Margin="27,287,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="180" Grid.Row="1"/>
+        <Label Content="ФИО входящего" HorizontalAlignment="Left" Margin="27,27,0,0" VerticalAlignment="Top" Cursor="" Grid.Row="1"/>
+        <Label Content="Должность" HorizontalAlignment="Left" Margin="27,88,0,0" VerticalAlignment="Top" Grid.Row="1"/>
+        <Label Content="Организация" HorizontalAlignment="Left" Margin="27,150,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.603,2.426" Grid.Row="1"/>
+        <Label Content="Путь" HorizontalAlignment="Left" Margin="27,202,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.603,2.426" Grid.Row="1"/>
+        <Label Content="Класс ВВСТ" HorizontalAlignment="Left" Margin="27,261,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.603,2.426" Grid.Row="1"/>
+        <Button Content="Создать новый" HorizontalAlignment="Left" Margin="27,327,0,0" VerticalAlignment="Top" Width="99" Grid.Row="1"/>
+        <Button Content="Загрузить" HorizontalAlignment="Left" Margin="153,327,0,0" VerticalAlignment="Top" Width="71" Grid.Row="1"/>
+        <Button Content="Перейти к работе" HorizontalAlignment="Left" Margin="241,327,0,0" VerticalAlignment="Top" Width="103" Click="Button_Click" Grid.Row="1"/>
+        <ToolBarTray Background="#FFF4C6D7">
+            <ToolBar Background="#FFF4C6D7">
+                <Image Width="25" Height="25" Source="/AD/AD_logo.png"/>
+                <Menu x:Name="m_fille" >
+                    <MenuItem x:Name="mi_open_file" Header="Файл" Background="#FFF8D4E3" BorderThickness="0,0,0,0">
+                        <MenuItem Header="Открыть файл" ></MenuItem>
+                    </MenuItem>
+                </Menu>
+                <Button x:Name="bt_setttings" Content="Настойки" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="#FFF8D4E3" Click="bt_setttings_Click"/>
+            </ToolBar>
+        </ToolBarTray>
 
     </Grid>
 </Window>

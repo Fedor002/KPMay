@@ -30,5 +30,11 @@ namespace KPMay
             Redaction taskWindow = new Redaction();
             taskWindow.Show();
         }
+
+        private void bt_setttings_Click(object sender, RoutedEventArgs e)
+        {
+            Settiings settiings = new Settiings();
+            settiings.Show();
+        }
     }
 }
