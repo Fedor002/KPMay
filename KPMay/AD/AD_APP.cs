@@ -271,7 +271,7 @@ namespace KPMay
             {
                 throw new FileNotFoundException("Файл не найден", adFilePath);
             }
-            Directory.CreateDirectory(tempFolderPath);
+            Directory.CreateDirectory(Path.GetDirectoryName(tempFolderPath));
             string fileNameWithoutExt = Path.GetFileNameWithoutExtension(adFilePath);
 
             string tempPath = Path.Combine(tempFolderPath, fileNameWithoutExt + ".xml");
