@@ -273,7 +273,7 @@ namespace KPMay
             }
             Directory.CreateDirectory(Path.GetDirectoryName(tempFolderPath));
             File.Copy(adFilePath, tempFolderPath, overwrite: true);
-            return tempFolderPath;
+            return adFilePath;
         }
 
     }
