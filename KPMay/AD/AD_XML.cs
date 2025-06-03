@@ -407,7 +407,8 @@ namespace KPMay
                 technology_matrix = ConvertNodeToMatrix(GetChildNode(xmlNode, tags.technology_matrix)),
                 enterprise_grade = Convert.ToDouble(GetNodeValue(GetChildNode(xmlNode, tags.enterprise_grade))),
                 technology_grade = Convert.ToDouble(GetNodeValue(GetChildNode(xmlNode, tags.technology_grade))),
-                lvl = Convert.ToInt32(GetNodeValue(GetChildNode(xmlNode, tags.lvl)))
+                lvl = Convert.ToInt32(GetNodeValue(GetChildNode(xmlNode, tags.lvl))),
+                criticalTechnology = GetNodeValue(GetChildNode(xmlNode, tags.critical_technology))
             };
 
             foreach (XmlNode child in xmlNode.ChildNodes)
