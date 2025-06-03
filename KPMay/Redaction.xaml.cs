@@ -35,6 +35,23 @@ namespace KPMay
         private Dictionary<string, double> _vectorValues;
         private SquareMatrix MatrixContext;
         private CustomTags ct = new CustomTags();
+        public Redaction(string path)
+        {
+            InitializeComponent();
+
+            XML.LoadXML(path);
+
+            custom_system tree = XML.GetSystemFromXml();
+            nodes = tree.Nodes;
+            List<string> ids = XML.GetAllAttributeValues(new[] { ct.system, ct.subsystem }, ct.id);
+            treeView1.ItemsSource = nodes;
+            foreach (var item in treeView1.Items)
+            {
+                var tvi = treeView1.ItemContainerGenerator.ContainerFromItem(item) as TreeViewItem;
+                if (tvi != null)
+                    tvi.IsExpanded = true; // или true, если нужно развернуть
+            }
+        }
 
         string filePath = _io.Path.Combine(AppContext.BaseDirectory, "InstactionsForFillingMatrix.docx");
 
@@ -75,6 +92,25 @@ namespace KPMay
             double N = calc.MakeTheFunny();
 
             custom_system selectedNode = (custom_system)treeView1.SelectedItem;
+
+            int i = 0;
+
+            List<double> vector = new List<double>();
+
+
+            foreach (var element in _vectorValues)
+            {
+                vector.Add(element.Value);
+
+            }
+
+            foreach (custom_system el in selectedNode.Nodes)
+            {
+                XML.AddUniqueChildToNodeById((ct.enterprise_grade, vector[i].ToString()), (ct.id, el.Id));
+                XML.SaveXML();
+                i++;
+            }
+
 
             XML.AddUniqueChildToNodeById((ct.enterprise_grade, N.ToString()), (ct.id, selectedNode.Id));
             XML.SaveXML();
@@ -527,6 +563,11 @@ namespace KPMay
             excel.Close();
 
             MessageBox.Show("Данные успешно экспортированы в Excel!");
+        }
+
+        private void mi_save_file_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 
