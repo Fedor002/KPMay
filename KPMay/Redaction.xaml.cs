@@ -46,7 +46,7 @@ namespace KPMay
 
             custom_system tree = XML.GetSystemFromXml();
             nodes = tree.Nodes;
-            List<string> ids = XML.GetAllAttributeValues(new[] { "system", "subsystem" },"id");
+            List<string> ids = XML.GetAllAttributeValues(new[] { ct.system, ct.subsystem },ct.id);
             treeView1.ItemsSource = nodes;
             foreach (var item in treeView1.Items)
             {
@@ -76,7 +76,7 @@ namespace KPMay
 
             custom_system selectedNode = (custom_system)treeView1.SelectedItem;
 
-            XML.AddUniqueChildToNodeById(("enterprise_grade", N.ToString()), ("id", selectedNode.Id));
+            XML.AddUniqueChildToNodeById((ct.enterprise_grade, N.ToString()), (ct.id, selectedNode.Id));
             XML.SaveXML();
             ReloadTreeView();
         }
@@ -89,7 +89,7 @@ namespace KPMay
 
             custom_system selectedNode = (custom_system)treeView1.SelectedItem;
 
-            XML.AddUniqueChildToNodeById(("technology_grade", N.ToString()), ("id", selectedNode.Id));
+            XML.AddUniqueChildToNodeById((ct.technology_grade, N.ToString()), (ct.id, selectedNode.Id));
             XML.SaveXML();
             ReloadTreeView();
         }
@@ -367,9 +367,9 @@ namespace KPMay
             {
                 string senderName = (sender as FrameworkElement)?.Name;
                 if (senderName == "enterprise")
-                    XML.AddMatrixToNode(("enterprise_matrix", matrix._matrix), ("id", selectedNode.Id));
+                    XML.AddMatrixToNode((ct.enterprise_matrix, matrix._matrix), (ct.id, selectedNode.Id));
                 else if (senderName == "technology")
-                    XML.AddMatrixToNode(("integration_matrix", matrix._matrix), ("id", selectedNode.Id));
+                    XML.AddMatrixToNode((ct.technology_matrix, matrix._matrix), (ct.id, selectedNode.Id));
 
                 XML.SaveXML();
                 matrixWindow.Close();

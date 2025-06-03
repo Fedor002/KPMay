@@ -12,12 +12,12 @@ namespace KPMay
         private string _name { get; set; }
         private ObservableCollection<custom_system> _children { get; set; } = new ObservableCollection<custom_system>();
         private string _id;
-        private double[,] _enterprise_matrix;
-        private double[,] _technology_matrix;
-        private double[,] _integration_matrix;
-        private double _enterprise_grade;
-        private double _technology_grade;
-        private double _integration_grade;
+        private string _critical_technology; //Критическая технология
+        private int _lvl; //Уровень вложенности
+        private double[,] _enterprise_matrix; //УГИ УГПС
+        private double[,] _technology_matrix; //УГИ УГТС
+        private double _enterprise_grade; //УГП
+        private double _technology_grade; //УГТ
 
         public string Name
         {
@@ -29,6 +29,17 @@ namespace KPMay
         {
             get { return _id; }
             set { _id = value; }
+        }
+        public int lvl
+        {
+            get { return _lvl; }
+            set { _lvl = value; }
+        }
+
+        public string criticalTechnology
+        {
+            get { return _critical_technology; }
+            set { _critical_technology = value; }
         }
         public ObservableCollection<custom_system> Nodes
         {
@@ -45,11 +56,6 @@ namespace KPMay
             get { return _technology_matrix; }
             set { _technology_matrix = value; }
         }
-        public double[,] integration_matrix
-        {
-            get { return _integration_matrix; }
-            set { _integration_matrix = value; }
-        }
 
         public double enterprise_grade
         {
@@ -62,25 +68,19 @@ namespace KPMay
             get { return _technology_grade; }
             set { _technology_grade = value; }
         }
-
-        public double integration_grade
-        {
-            get { return _integration_grade; }
-            set { _integration_grade = value; }
-        }
     }
     public class CustomTags 
     {
         private string _enterprise_matrix = "enterprise_matrix";
         private string _technology_matrix = "technology_matrix";
-        private string _integration_matrix = "integration_matrix";
         private string _enterprise_grade = "enterprise_grade";
         private string _technology_grade = "technology_grade";
-        private string _integration_grade = "integration_grade";
         private string _system = "system";
         private string _subsystem = "subsystem";
         private string _id = "id";
         private string _name = "name";
+        private string _lvl = "lvl";
+        private string _critical_technology = "critical_technology";
 
         public string enterprise_matrix
         {
@@ -90,10 +90,6 @@ namespace KPMay
         {
             get { return _technology_matrix; }
         }
-        public string integration_matrix
-        {
-            get { return _integration_matrix; }
-        }
         public string enterprise_grade
         {
             get { return _enterprise_grade; }
@@ -101,10 +97,6 @@ namespace KPMay
         public string technology_grade
         {
             get { return _technology_grade; }
-        }
-        public string integration_grade
-        {
-            get { return _integration_grade; }
         }
         public string system
         {
@@ -121,6 +113,14 @@ namespace KPMay
         public string name
         {
             get { return _name; }
+        }
+        public string lvl
+        {
+            get { return _lvl; }
+        }
+        public string critical_technology
+        {
+            get { return _critical_technology; }
         }
     }
 }

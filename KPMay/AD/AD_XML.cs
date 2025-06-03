@@ -398,21 +398,21 @@ namespace KPMay
         //--------------------------------------------не универсальные методы-----------------------------------------------------------------------------------------
         private custom_system GetSystemFromXml(XmlNode xmlNode)
         {
+            CustomTags tags = new CustomTags();
             custom_system tree = new custom_system
             {
-                Name = GetNodeValue(GetChildNode(xmlNode, "name")),
-                Id = xmlNode.Attributes?["id"]?.Value ?? string.Empty,
-                enterprise_matrix = ConvertNodeToMatrix(GetChildNode(xmlNode, "enterprise_matrix")),
-                technology_matrix = ConvertNodeToMatrix(GetChildNode(xmlNode, "technology_matrix")),
-                integration_matrix = ConvertNodeToMatrix(GetChildNode(xmlNode, "integration_matrix")),
-                enterprise_grade = Convert.ToDouble(GetNodeValue(GetChildNode(xmlNode, "enterprise_grade"))),
-                technology_grade = Convert.ToDouble(GetNodeValue(GetChildNode(xmlNode, "technology_grade"))),
-                integration_grade = Convert.ToDouble(GetNodeValue(GetChildNode(xmlNode, "integration_grade")))
+                Name = GetNodeValue(GetChildNode(xmlNode, tags.name)),
+                Id = xmlNode.Attributes?[tags.id]?.Value ?? string.Empty,
+                enterprise_matrix = ConvertNodeToMatrix(GetChildNode(xmlNode, tags.enterprise_matrix)),
+                technology_matrix = ConvertNodeToMatrix(GetChildNode(xmlNode, tags.technology_matrix)),
+                enterprise_grade = Convert.ToDouble(GetNodeValue(GetChildNode(xmlNode, tags.enterprise_grade))),
+                technology_grade = Convert.ToDouble(GetNodeValue(GetChildNode(xmlNode, tags.technology_grade))),
+                lvl = Convert.ToInt32(GetNodeValue(GetChildNode(xmlNode, tags.lvl)))
             };
 
             foreach (XmlNode child in xmlNode.ChildNodes)
             {
-                if (child.NodeType == XmlNodeType.Element && new[] { "system", "subsystem" }.Contains(child.Name))
+                if (child.NodeType == XmlNodeType.Element && new[] { tags.system, tags.subsystem }.Contains(child.Name))
                 {
                     tree.Nodes.Add(GetSystemFromXml(child));
                 }
