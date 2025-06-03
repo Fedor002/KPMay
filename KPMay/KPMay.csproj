@@ -107,6 +107,7 @@
     <Compile Include="PopUp.xaml.cs">
       <DependentUpon>PopUp.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ProjectModel.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -184,6 +185,7 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="AD\AD_logo.png" />
+    <Resource Include="Resources\test.xml" />
     <Content Include="test.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -216,6 +218,9 @@
       <Isolated>False</Isolated>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </COMReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="bin\Debug\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

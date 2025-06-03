@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:KPMay"
         mc:Ignorable="d"
-        Title="Redaction" Height="475" Width="800">
+        Title="Redaction" Height="501" Width="800">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
@@ -23,7 +23,7 @@
         <Button Content="Сформировать Отчет" HorizontalAlignment="Left" Margin="19,350,0,0" VerticalAlignment="Top" Width="140" Click="Button_Click_2" Grid.Row="1" />
         <Button x:Name="enterprise" Content="Оценка технологий" HorizontalAlignment="Left" Margin="362,350,0,0" VerticalAlignment="Top" Width="140" Click="CreateSquareMatrixButton_Click" Grid.Row="1"/>
         <Button x:Name="technology" Content="Оценка произовдства" HorizontalAlignment="Left" Margin="362,376,0,0" VerticalAlignment="Top" Width="140" Click="CreateSquareMatrixButton_Click" Grid.Row="1"/>
-        <Button Content="Оценка произовдства" HorizontalAlignment="Left" Margin="362,401,0,0" VerticalAlignment="Top" Width="140" Click="CreateSquareMatrixButton_Click" Grid.Row="1"/>
+        <Button Content="Оценка интеграций" HorizontalAlignment="Left" Margin="362,401,0,0" VerticalAlignment="Top" Width="140" Click="CreateSquareMatrixButton_Click" Grid.Row="1"/>
         <Grid HorizontalAlignment="Left" Height="18" VerticalAlignment="Top" Width="18" Margin="186,18,0,0" MouseLeftButtonDown="Grid_MouseLeftButtonDown" Grid.Row="1">
             <Ellipse HorizontalAlignment="Left" Height="17" Stroke="Black" VerticalAlignment="Top" Width="17" Cursor="Hand" Fill="Black"/>
             <Label Content="i" HorizontalAlignment="Left" VerticalAlignment="Top" IsEnabled="False" Width="13" Margin="2,-5,0,0" Foreground="White"/>

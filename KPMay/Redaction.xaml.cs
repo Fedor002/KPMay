@@ -29,8 +29,13 @@ namespace KPMay
 
     public partial class Redaction : Window
     {
-        ProjectModel model;
         string _system_xml_path = _io.Path.Combine(AppContext.BaseDirectory, "test.xml");
+        string _system_report_path = _io.Path.Combine(AppContext.BaseDirectory, "test.docx");
+        string _system_integration_level_path = _io.Path.Combine(AppContext.BaseDirectory, "integration_readiness_level.jpg");
+        string _system_technology_level_path = _io.Path.Combine(AppContext.BaseDirectory, "technology_readiness_level.jpg");
+        string _system_production_level_path = _io.Path.Combine(AppContext.BaseDirectory, "production_readiness_level.jpg");
+
+        ProjectModel model;
         AD_XML XML = new AD_XML();
         ObservableCollection<custom_system> nodes;
         private Dictionary<string, double> _vectorValues;
@@ -571,6 +576,62 @@ namespace KPMay
         private void mi_save_file_Click(object sender, RoutedEventArgs e)
         {
 
+        }
+
+        private void ShowImageModal(string imagePath, string title)
+        {
+            // Создаем новое модальное окно
+            Window imageWindow = new Window
+            {
+                Title = title,
+                Width = 1200,
+                Height = 600,
+                WindowStartupLocation = WindowStartupLocation.CenterOwner,
+                Owner = this, // Устанавливаем владельца (главное окно)
+                ResizeMode = ResizeMode.NoResize // Запрещаем изменение размера
+            };
+
+            // Создаем элемент Image
+            System.Windows.Controls.Image image = new System.Windows.Controls.Image
+            {
+                Stretch = System.Windows.Media.Stretch.Uniform
+            };
+
+            try
+            {
+                // Загружаем изображение из файла
+                BitmapImage bitmap = new BitmapImage();
+                bitmap.BeginInit();
+                bitmap.UriSource = new Uri(imagePath);
+                bitmap.EndInit();
+                image.Source = bitmap;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка загрузки изображения: {ex.Message}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            // Добавляем Image в окно
+            imageWindow.Content = image;
+
+            // Показываем окно как модальное
+            imageWindow.ShowDialog();
+        }
+
+        private void Grid_MouseLeftButtonDownIn1(object sender, MouseButtonEventArgs e)
+        {
+            ShowImageModal(_system_technology_level_path, "Уровни готовности технологий");
+        }
+
+        private void Grid_MouseLeftButtonDownIn2(object sender, MouseButtonEventArgs e)
+        {
+            ShowImageModal(_system_production_level_path, "Уровни готовности производства");
+        }
+
+        private void Grid_MouseLeftButtonDownIn3(object sender, MouseButtonEventArgs e)
+        {
+            ShowImageModal(_system_integration_level_path, "Уровни готовности интаграций");
         }
     }
 
