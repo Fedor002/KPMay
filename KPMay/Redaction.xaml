@@ -5,42 +5,46 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:KPMay"
         mc:Ignorable="d"
-        Title="Redaction" Height="450" Width="800">
+        Title="Redaction" Height="475" Width="800">
     <Grid>
-        <Label Content="Наименование проекта" HorizontalAlignment="Left" Margin="20,14,0,0" VerticalAlignment="Top" FontSize="14"/>
-        <TextBox HorizontalAlignment="Left" Margin="20,48,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
-        <Button Content="Добавить Уровень" HorizontalAlignment="Left" Margin="20,136,0,0" VerticalAlignment="Top" Width="120" Click="Button_Click"/>
-        <ComboBox HorizontalAlignment="Left" Margin="20,310,0,0" VerticalAlignment="Top" Width="120" IsDropDownOpen="True">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Label Content="Наименование проекта" HorizontalAlignment="Left" Margin="19,11,0,0" VerticalAlignment="Top" FontSize="14" Grid.Row="1"/>
+        <TextBox HorizontalAlignment="Left" Margin="19,45,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120" Grid.Row="1"/>
+        <Button Content="Добавить Уровень" HorizontalAlignment="Left" Margin="19,133,0,0" VerticalAlignment="Top" Width="120" Click="Button_Click" Grid.Row="1"/>
+        <ComboBox HorizontalAlignment="Left" Margin="19,307,0,0" VerticalAlignment="Top" Width="120" IsDropDownOpen="True" Grid.Row="1">
             <ComboBoxItem Content="Вид отчета 1"/>
             <ComboBoxItem Content="Вид отчета 2"/>
             <ComboBoxItem Content="Вид отчета 3"/>
             <ComboBoxItem Content="Вид отчета 4"/>
         </ComboBox>
-        <Button Content="Сформировать Отчет" HorizontalAlignment="Left" Margin="20,354,0,0" VerticalAlignment="Top" Width="140" Click="Button_Click_2" />
-        <Button x:Name="enterprise" Content="Оценка технологий" HorizontalAlignment="Left" Margin="363,354,0,0" VerticalAlignment="Top" Width="140" Click="CreateSquareMatrixButton_Click"/>
-        <Button x:Name="technology" Content="Оценка произовдства" HorizontalAlignment="Left" Margin="363,379,0,0" VerticalAlignment="Top" Width="140" Click="CreateSquareMatrixButton_Click"/>
-        <Button Content="Оценка произовдства" HorizontalAlignment="Left" Margin="363,404,0,0" VerticalAlignment="Top" Width="140" Click="CreateSquareMatrixButton_Click"/>
-        <Grid HorizontalAlignment="Left" Height="18" VerticalAlignment="Top" Width="18" Margin="187,21,0,0" MouseLeftButtonDown="Grid_MouseLeftButtonDown">
+        <Button Content="Сформировать Отчет" HorizontalAlignment="Left" Margin="19,350,0,0" VerticalAlignment="Top" Width="140" Click="Button_Click_2" Grid.Row="1" />
+        <Button x:Name="enterprise" Content="Оценка технологий" HorizontalAlignment="Left" Margin="362,350,0,0" VerticalAlignment="Top" Width="140" Click="CreateSquareMatrixButton_Click" Grid.Row="1"/>
+        <Button x:Name="technology" Content="Оценка произовдства" HorizontalAlignment="Left" Margin="362,376,0,0" VerticalAlignment="Top" Width="140" Click="CreateSquareMatrixButton_Click" Grid.Row="1"/>
+        <Button Content="Оценка произовдства" HorizontalAlignment="Left" Margin="362,401,0,0" VerticalAlignment="Top" Width="140" Click="CreateSquareMatrixButton_Click" Grid.Row="1"/>
+        <Grid HorizontalAlignment="Left" Height="18" VerticalAlignment="Top" Width="18" Margin="186,18,0,0" MouseLeftButtonDown="Grid_MouseLeftButtonDown" Grid.Row="1">
             <Ellipse HorizontalAlignment="Left" Height="17" Stroke="Black" VerticalAlignment="Top" Width="17" Cursor="Hand" Fill="Black"/>
             <Label Content="i" HorizontalAlignment="Left" VerticalAlignment="Top" IsEnabled="False" Width="13" Margin="2,-5,0,0" Foreground="White"/>
 
         </Grid>
-        <Grid HorizontalAlignment="Left" Height="18" VerticalAlignment="Top" Width="18" Margin="340,357,0,0" MouseLeftButtonDown="Grid_MouseLeftButtonDownIn1">
+        <Grid HorizontalAlignment="Left" Height="18" VerticalAlignment="Top" Width="18" Margin="339,353,0,0" MouseLeftButtonDown="Grid_MouseLeftButtonDownIn1" Grid.Row="1">
             <Ellipse HorizontalAlignment="Left" Height="17" Stroke="Black" VerticalAlignment="Top" Width="17" Cursor="Hand" Fill="Black"/>
             <Label Content="i" HorizontalAlignment="Center" VerticalAlignment="Top" IsEnabled="False" Width="13" Margin="0,-4,0,0" Foreground="White"/>
 
         </Grid>
-        <Grid HorizontalAlignment="Left" Height="18" VerticalAlignment="Top" Width="18" Margin="340,382,0,0" MouseLeftButtonDown="Grid_MouseLeftButtonDownIn2">
+        <Grid HorizontalAlignment="Left" Height="18" VerticalAlignment="Top" Width="18" Margin="339,379,0,0" MouseLeftButtonDown="Grid_MouseLeftButtonDownIn2" Grid.Row="1">
             <Ellipse HorizontalAlignment="Left" Height="17" Stroke="Black" VerticalAlignment="Top" Width="17" Cursor="Hand" Fill="Black"/>
             <Label Content="i" HorizontalAlignment="Center" VerticalAlignment="Top" IsEnabled="False" Width="13" Margin="0,-4,0,0" Foreground="White"/>
 
         </Grid>
-        <Grid HorizontalAlignment="Left" Height="18" VerticalAlignment="Top" Width="18" Margin="340,406,0,0" MouseLeftButtonDown="Grid_MouseLeftButtonDownIn3">
+        <Grid HorizontalAlignment="Left" Height="18" VerticalAlignment="Top" Width="18" Margin="339,403,0,0" MouseLeftButtonDown="Grid_MouseLeftButtonDownIn3" Grid.Row="1">
             <Ellipse HorizontalAlignment="Left" Height="17" Stroke="Black" VerticalAlignment="Top" Width="17" Cursor="Hand" Fill="Black"/>
             <Label Content="i" HorizontalAlignment="Center" VerticalAlignment="Top" IsEnabled="False" Width="13" Margin="0,-4,0,0" Foreground="White"/>
 
         </Grid>
-        <Grid HorizontalAlignment="Left" VerticalAlignment="Top" Margin="508,48,0,0" Height="376" Width="282">
+        <Grid HorizontalAlignment="Left" VerticalAlignment="Top" Margin="507,44,0,0" Height="376" Width="282" Grid.Row="1">
             <TreeView x:Name="treeView1">
                 <TreeView.ItemTemplate>
                     <HierarchicalDataTemplate ItemsSource="{Binding Path=Nodes}">
@@ -50,12 +54,23 @@
             </TreeView>
 
         </Grid>
-        <Label Content="Отображение" HorizontalAlignment="Left" Margin="508,20,0,0" VerticalAlignment="Top" />
-        <Button Content="Перейти в подсистему" HorizontalAlignment="Left" Margin="375,48,0,0" VerticalAlignment="Top"/>
-        <Button Content="Сохранить изменения" HorizontalAlignment="Left" Margin="20,80,0,0" VerticalAlignment="Top" Width="140" Click="Button_Click"/>
-        <TextBox x:Name="ElementTextBox" HorizontalAlignment="Left" Margin="20,111,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120" TextChanged="TextBox_TextChanged"/>
-        <Button Content="Создать матрицу системы" HorizontalAlignment="Left" Margin="340,80,0,0" VerticalAlignment="Top" Width="163"/>
-        <Button Content="Удалить элемент" HorizontalAlignment="Left" Height="26" Margin="400,111,0,0" VerticalAlignment="Top" Width="103" Click="Button_Click_1"/>
-        <Button Content="Excel" HorizontalAlignment="Left" Margin="20,389,0,0" VerticalAlignment="Top" Width="140" Click="Button_Click_3"/>
+        <Label Content="Отображение" HorizontalAlignment="Left" Margin="507,17,0,0" VerticalAlignment="Top" Grid.Row="1" />
+        <Button Content="Перейти в подсистему" HorizontalAlignment="Left" Margin="374,45,0,0" VerticalAlignment="Top" Grid.Row="1"/>
+        <Button Content="Сохранить изменения" HorizontalAlignment="Left" Margin="19,77,0,0" VerticalAlignment="Top" Width="140" Click="Button_Click" Grid.Row="1"/>
+        <TextBox x:Name="ElementTextBox" HorizontalAlignment="Left" Margin="19,108,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120" TextChanged="TextBox_TextChanged" Grid.Row="1"/>
+        <Button Content="Создать матрицу системы" HorizontalAlignment="Left" Margin="339,77,0,0" VerticalAlignment="Top" Width="163" Grid.Row="1"/>
+        <Button Content="Удалить элемент" HorizontalAlignment="Left" Height="26" Margin="399,108,0,0" VerticalAlignment="Top" Width="103" Click="Button_Click_1" Grid.Row="1"/>
+        <Button Content="Excel" HorizontalAlignment="Left" Margin="19,386,0,0" VerticalAlignment="Top" Width="140" Click="Button_Click_3" Grid.Row="1"/>
+
+        <ToolBarTray Background="#FFF4C6D7">
+            <ToolBar Background="#FFF4C6D7">
+                <Image Width="25" Height="25" Source="/AD/AD_logo.png"/>
+                <Menu x:Name="m_fille" >
+                    <MenuItem x:Name="mi_open_file" Header="Файл" Background="#FFF8D4E3" BorderThickness="0,0,0,0">
+                        <MenuItem x:Name="mi_save_file" Header="Сохранить файл" Click="mi_save_file_Click" ></MenuItem>
+                    </MenuItem>
+                </Menu>
+            </ToolBar>
+        </ToolBarTray>
     </Grid>
 </Window>
