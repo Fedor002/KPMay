@@ -66,8 +66,9 @@
             <ToolBar Background="#FFF4C6D7">
                 <Image Width="25" Height="25" Source="/AD/AD_logo.png"/>
                 <Menu x:Name="m_fille" >
-                    <MenuItem x:Name="mi_open_file" Header="Файл" Background="#FFF8D4E3" BorderThickness="0,0,0,0">
+                    <MenuItem x:Name="FileMenu" Header="Файл" Background="#FFF8D4E3" BorderThickness="0,0,0,0">
                         <MenuItem x:Name="mi_save_file" Header="Сохранить файл" Click="mi_save_file_Click" ></MenuItem>
+                        <MenuItem x:Name="mi_open_file" Header="Открыть файл" ></MenuItem>
                     </MenuItem>
                 </Menu>
             </ToolBar>

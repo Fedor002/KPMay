@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Data.SQLite;
+using System.IO;
+using Microsoft.Win32;
 
 namespace KPMay
 {
@@ -211,6 +213,70 @@ namespace KPMay
             }
 
             return result;
+        }
+
+        public static string SaveAdFile(string currentPath, string tempXmlFilePath)
+        {
+            string pathToSave = currentPath;
+
+            if (string.IsNullOrEmpty(currentPath))
+            {
+                SaveFileDialog dlg = new Microsoft.Win32.SaveFileDialog();
+                string myDocs = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+                string initial_folder = Path.Combine(myDocs, "KorabelProFit");
+                Directory.CreateDirectory(initial_folder);
+                dlg.InitialDirectory = initial_folder;
+                dlg.Filter = "AD Project files (*.ad)|*.ad|All files (*.*)|*.*";
+                dlg.DefaultExt = ".ad";
+                dlg.Title = "Сохранить";
+
+                bool? result = dlg.ShowDialog();
+                if (result != true)
+                {
+                    return null;
+                }
+
+                pathToSave = dlg.FileName;
+
+                if (Path.GetExtension(pathToSave).ToLower() != ".ad")
+                {
+                    pathToSave = Path.ChangeExtension(pathToSave, ".ad");
+                }
+            }
+
+            File.Copy(tempXmlFilePath, pathToSave, overwrite: true);
+
+            return pathToSave;
+        }
+
+        public static string OpenAdFile(string tempFolderPath)
+        {
+            string myDocs = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            string initial_folder = Path.Combine(myDocs, "KorabelProFit");
+            Directory.CreateDirectory(initial_folder);
+            OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog
+            {
+                Filter = "AD Project files (*.ad)|*.ad|All files (*.*)|*.*",
+                Title = "Открыть",
+                InitialDirectory = initial_folder
+            };
+            if (dlg.ShowDialog() != true)
+            {
+                return null; 
+            }
+
+            string adFilePath = dlg.FileName;
+
+            if (!File.Exists(adFilePath))
+            {
+                throw new FileNotFoundException("Файл не найден", adFilePath);
+            }
+            Directory.CreateDirectory(tempFolderPath);
+            string fileNameWithoutExt = Path.GetFileNameWithoutExtension(adFilePath);
+
+            string tempPath = Path.Combine(tempFolderPath, fileNameWithoutExt + ".xml");
+            File.Copy(adFilePath, tempPath, overwrite: true);
+            return tempPath;
         }
 
     }

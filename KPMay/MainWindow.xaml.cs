@@ -49,6 +49,9 @@ namespace KPMay
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
             ProjectModel model = new ProjectModel(); 
+            model.tempPath = project_file_path;
+            model.dbPath = db_path;
+            model.dbName = db_name;
             AD_XML ad_xml = new AD_XML();
             ad_xml.CreateXML(System.IO.Path.Combine(project_file_path, "combineTemp.xml"));
             Redaction taskWindow = new Redaction(model);

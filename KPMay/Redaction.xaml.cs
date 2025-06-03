@@ -575,7 +575,7 @@ namespace KPMay
 
         private void mi_save_file_Click(object sender, RoutedEventArgs e)
         {
-
+            AD_APP.SaveAdFile(model.currentPath, model.tempPath);
         }
 
         private void ShowImageModal(string imagePath, string title)
@@ -632,6 +632,12 @@ namespace KPMay
         private void Grid_MouseLeftButtonDownIn3(object sender, MouseButtonEventArgs e)
         {
             ShowImageModal(_system_integration_level_path, "Уровни готовности интаграций");
+        }
+
+        private void mi_open_file_Click(object sender, RoutedEventArgs e)
+        {
+            model.currentPath = AD_APP.OpenAdFile(model.tempPath);
+            nodes = XML.GetSystemFromXml().Nodes;
         }
     }
 
