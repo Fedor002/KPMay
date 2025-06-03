@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.IO;
 
 namespace KPMay
 {
@@ -20,8 +21,16 @@ namespace KPMay
     /// </summary>
     public partial class MainWindow : Window
     {
+        AD_Sqlite ad_sqlite = new AD_Sqlite();
+        AD_APP ad_app = new AD_APP();
+        string project_file_path =  AD_General.ConvertEnviromentPatToPath("%TEMP%\\KorabelProFit");
+        string db_path = AD_General.ConvertEnviromentPatToPath("%APPDATA%\\KorabelProFit");
+        string db_name = "KBPdb";
         public MainWindow()
         {
+            ad_sqlite.CreateDBFile(db_path, db_name);
+            ad_app.CreateBasicTables(db_path, db_name);
+            if (!Directory.Exists(project_file_path)) Directory.CreateDirectory(project_file_path);
             InitializeComponent();
         }
 

@@ -23,7 +23,7 @@
         <Label Content="Класс ВВСТ" HorizontalAlignment="Left" Margin="27,261,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.603,2.426" Grid.Row="1"/>
         <Button Content="Создать новый" HorizontalAlignment="Left" Margin="27,327,0,0" VerticalAlignment="Top" Width="99" Grid.Row="1"/>
         <Button Content="Загрузить" HorizontalAlignment="Left" Margin="153,327,0,0" VerticalAlignment="Top" Width="71" Grid.Row="1"/>
-        <Button Content="Перейти к работе" HorizontalAlignment="Left" Margin="241,327,0,0" VerticalAlignment="Top" Width="103" Click="Button_Click" Grid.Row="1"/>
+        <Button Content="Перейти к работе" HorizontalAlignment="Left" Margin="241,327,0,0" Width="103" Click="Button_Click" Grid.Row="1"/>
         <ToolBarTray Background="#FFF4C6D7">
             <ToolBar Background="#FFF4C6D7">
                 <Image Width="25" Height="25" Source="/AD/AD_logo.png"/>
