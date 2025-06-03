@@ -29,17 +29,20 @@ namespace KPMay
 
     public partial class Redaction : Window
     {
+        ProjectModel model;
         string _system_xml_path = _io.Path.Combine(AppContext.BaseDirectory, "test.xml");
         AD_XML XML = new AD_XML();
         ObservableCollection<custom_system> nodes;
         private Dictionary<string, double> _vectorValues;
         private SquareMatrix MatrixContext;
         private CustomTags ct = new CustomTags();
-        public Redaction(string path)
+        public Redaction(ProjectModel model)
         {
             InitializeComponent();
 
-            XML.LoadXML(path);
+            this.model = model;
+
+            XML.LoadXML(model.tempPath);
 
             custom_system tree = XML.GetSystemFromXml();
             nodes = tree.Nodes;
