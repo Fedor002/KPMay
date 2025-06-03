@@ -18,6 +18,7 @@ using System.Xml;
 using _io = System.IO;
 using System.Xml.Linq;
 using KPMay.MathHolder;
+using KPMay;
 
 namespace KPMay
 {
@@ -34,6 +35,8 @@ namespace KPMay
         private Dictionary<string, double> _vectorValues;
         private SquareMatrix MatrixContext;
         private CustomTags ct = new CustomTags();
+
+        string filePath = _io.Path.Combine(AppContext.BaseDirectory, "InstactionsForFillingMatrix.docx");
 
         public Redaction()
         {
@@ -65,7 +68,7 @@ namespace KPMay
 
         }
 
-        private void CalcTechno(object sender, RoutedEventArgs e)
+        private void CalcTechnoE(object sender, RoutedEventArgs e)
         {
             MathMatrix calc = new MathMatrix(MatrixContext, _vectorValues);
 
@@ -74,6 +77,19 @@ namespace KPMay
             custom_system selectedNode = (custom_system)treeView1.SelectedItem;
 
             XML.AddUniqueChildToNodeById(("enterprise_grade", N.ToString()), ("id", selectedNode.Id));
+            XML.SaveXML();
+            ReloadTreeView();
+        }
+
+        private void CalcTechnoT(object sender, RoutedEventArgs e)
+        {
+            MathMatrix calc = new MathMatrix(MatrixContext, _vectorValues);
+
+            double N = calc.MakeTheFunny();
+
+            custom_system selectedNode = (custom_system)treeView1.SelectedItem;
+
+            XML.AddUniqueChildToNodeById(("technology_grade", N.ToString()), ("id", selectedNode.Id));
             XML.SaveXML();
             ReloadTreeView();
         }
@@ -153,8 +169,6 @@ namespace KPMay
         private void Grid_MouseLeftButtonDownIn1(object sender, RoutedEventArgs e)
         {
 
-            string filePath = @"D:\VSWPF\KPMay\Instactions\test.docx"; // Укажите путь к файлу
-
             try
             {
                 Process.Start(new ProcessStartInfo
@@ -173,8 +187,6 @@ namespace KPMay
         private void Grid_MouseLeftButtonDownIn2(object sender, RoutedEventArgs e)
         {
 
-            string filePath = @"D:\VSWPF\KPMay\Instactions\test.docx"; // Укажите путь к файлу
-
             try
             {
                 Process.Start(new ProcessStartInfo
@@ -192,8 +204,6 @@ namespace KPMay
 
         private void Grid_MouseLeftButtonDownIn3(object sender, RoutedEventArgs e)
         {
-
-            string filePath = @"D:\VSWPF\KPMay\Instactions\test.docx"; // Укажите путь к файлу
 
             try
             {
@@ -241,8 +251,20 @@ namespace KPMay
             
             MatrixContext = new SquareMatrix(size, rootNames);
 
-            MatrixContext._matrix = selectedNode.enterprise_matrix;
-
+            if (selectedNode.enterprise_matrix != null)
+            {
+                MatrixContext._matrix = selectedNode.enterprise_matrix;
+            }
+ /*           else
+            {
+                double[,] matrixEmpty = new double[size, size]
+                {
+                    { 1, 2 },
+                    { 3, 4 }
+                };
+                MatrixContext._matrix = matrixEmpty;
+            }
+ */
 
             // Заполняем нулями (или другими значениями по умолчанию)
             //for (int i = 0; i < size; i++)
@@ -253,10 +275,10 @@ namespace KPMay
             //    }
             //}
 
-            ShowMatrix(MatrixContext);
+            ShowMatrix(MatrixContext, sender);
         }
 
-        private void ShowMatrix(SquareMatrix matrix)
+        private void ShowMatrix(SquareMatrix matrix, object sender)
         {
             // Получаем названия корневых узлов
             var rootNames = new List<string>();
@@ -343,16 +365,21 @@ namespace KPMay
 
             button.Click += (s, e) =>
             {
-                XML.AddMatrixToNode(("enterprise_matrix", matrix._matrix), ("id", "0"));
+                string senderName = (sender as FrameworkElement)?.Name;
+                if (senderName == "enterprise")
+                    XML.AddMatrixToNode(("enterprise_matrix", matrix._matrix), ("id", selectedNode.Id));
+                else if (senderName == "technology")
+                    XML.AddMatrixToNode(("integration_matrix", matrix._matrix), ("id", selectedNode.Id));
+
                 XML.SaveXML();
                 matrixWindow.Close();
-                ShowVectorInput(matrix);
+                ShowVectorInput(matrix, sender);
             };
 
             matrixWindow.Show();
         }
 
-        private void ShowVectorInput(SquareMatrix matrix)
+        private void ShowVectorInput(SquareMatrix matrix, object sender)
         {
             var rootNames = new List<string>();
             custom_system selectedNode = (custom_system)treeView1.SelectedItem;
@@ -397,15 +424,14 @@ namespace KPMay
                 Binding = new Binding("Value")
             });
 
-            // Обновляем вектор при изменении ячейки
-            grid.CellEditEnding += (sender, e) =>
+            grid.CellEditEnding += (s, e) =>
             {
                 if (e.EditAction == DataGridEditAction.Commit && e.Column.Header.ToString() == "Значение")
                 {
                     var editedItem = (VectorItem)e.Row.Item;
                     var newValue = Convert.ToDouble(((TextBox)e.EditingElement).Text);
 
-                    _vectorValues[editedItem.SystemName] = newValue; // Обновляем значение в словаре
+                    _vectorValues[editedItem.SystemName] = newValue;
                 }
             };
 
@@ -416,6 +442,13 @@ namespace KPMay
                 Width = 400,
                 Height = 500
             };
+
+            // Выбор метода по Name у sender
+            string senderName = (sender as FrameworkElement)?.Name;
+            if (senderName == "enterprise")
+                vectorWindow.Closed += (s, e) => CalcTechnoE(null, null);
+            else if (senderName == "technology")
+                vectorWindow.Closed += (s, e) => CalcTechnoT(null, null);
 
             vectorWindow.Show();
         }
@@ -437,9 +470,63 @@ namespace KPMay
             XML.AddMatrixToNode(("integration_matrix", matrix2), ("id", "0"));
             XML.AddUniqueChildToNodeById(("enterprise_grade", "5"), ("id", "0"));
             XML.AddUniqueChildToNodeById(("technology_grade", "6"), ("id", "0"));
-            XML.AddUniqueChildToNodeById(("enterprise_grade", "6"), ("id", "1"));
+            XML.AddUniqueChildToNodeById(("enterprise_grade", "9"), ("id", "1"));
             XML.SaveXML();
             ReloadTreeView();
+        }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            custom_system selectedNode = (custom_system)treeView1.SelectedItem;
+
+            XmlNode node = XML.doc.SelectSingleNode($"//*[@id='{selectedNode.Id}']");
+            if (node != null && node.ParentNode != null)
+            {
+                node.ParentNode.RemoveChild(node);
+                XML.SaveXML();
+                ReloadTreeView();
+            }
+            else
+            {
+                throw new Exception($"Узел с id={selectedNode.Id} не найден или не имеет родителя.");
+            }
+        }
+
+        private void Button_Click_3(object sender, RoutedEventArgs e)
+        {
+            custom_system root = XML.GetSystemFromXml();
+            var systems = new List<custom_system>();
+            void CollectSystems(custom_system node)
+            {
+                systems.Add(node);
+                foreach (var child in node.Nodes)
+                    CollectSystems(child);
+            }
+            CollectSystems(root);
+
+            // 2. Формируем массив для Excel
+            string[,] data = new string[systems.Count + 1, 4];
+            data[0, 0] = "ID";
+            data[0, 1] = "Название";
+            data[0, 2] = "Оценка (enterprise)";
+            data[0, 3] = "Оценка (technology)";
+            for (int i = 0; i < systems.Count; i++)
+            {
+                data[i + 1, 0] = systems[i].Id;
+                data[i + 1, 1] = systems[i].Name;
+                data[i + 1, 2] = systems[i].enterprise_grade.ToString();
+                data[i + 1, 3] = systems[i].technology_grade.ToString();
+            }
+
+            // 3. Создаём новый Excel-файл и записываем данные
+            string excelPath = _io.Path.Combine(AppContext.BaseDirectory, "export.xlsx");
+            var excel = new AD_Excel(excelPath, 1);
+            excel.CreateNewFile(); // создаёт новый пустой файл и лист
+            excel.WriteRange(0, 0, data); // записываем данные с первой ячейки
+            excel.SaveAs(excelPath);      // сохраняем по нужному пути
+            excel.Close();
+
+            MessageBox.Show("Данные успешно экспортированы в Excel!");
         }
     }
 

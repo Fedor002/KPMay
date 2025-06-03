@@ -10,16 +10,16 @@
         <Label Content="Наименование проекта" HorizontalAlignment="Left" Margin="20,14,0,0" VerticalAlignment="Top" FontSize="14"/>
         <TextBox HorizontalAlignment="Left" Margin="20,48,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
         <Button Content="Добавить Уровень" HorizontalAlignment="Left" Margin="20,136,0,0" VerticalAlignment="Top" Width="120" Click="Button_Click"/>
-        <ComboBox HorizontalAlignment="Left" Margin="20,346,0,0" VerticalAlignment="Top" Width="120" IsDropDownOpen="True">
+        <ComboBox HorizontalAlignment="Left" Margin="20,310,0,0" VerticalAlignment="Top" Width="120" IsDropDownOpen="True">
             <ComboBoxItem Content="Вид отчета 1"/>
             <ComboBoxItem Content="Вид отчета 2"/>
             <ComboBoxItem Content="Вид отчета 3"/>
             <ComboBoxItem Content="Вид отчета 4"/>
         </ComboBox>
-        <Button Content="Сформировать Отчет" HorizontalAlignment="Left" Margin="20,390,0,0" VerticalAlignment="Top" Width="140" Click="Button_Click_2"/>
-        <Button x:Name="Techno" Content="Оценка технологий" HorizontalAlignment="Left" Margin="363,354,0,0" VerticalAlignment="Top" Width="140" Click="CalcTechno"/>
-        <Button Content="Оценка произовдства" HorizontalAlignment="Left" Margin="363,379,0,0" VerticalAlignment="Top" Width="140"/>
-        <Button Content="Оценка произовдства" HorizontalAlignment="Left" Margin="363,404,0,0" VerticalAlignment="Top" Width="140"/>
+        <Button Content="Сформировать Отчет" HorizontalAlignment="Left" Margin="20,354,0,0" VerticalAlignment="Top" Width="140" Click="Button_Click_2" />
+        <Button x:Name="enterprise" Content="Оценка технологий" HorizontalAlignment="Left" Margin="363,354,0,0" VerticalAlignment="Top" Width="140" Click="CreateSquareMatrixButton_Click"/>
+        <Button x:Name="technology" Content="Оценка произовдства" HorizontalAlignment="Left" Margin="363,379,0,0" VerticalAlignment="Top" Width="140" Click="CreateSquareMatrixButton_Click"/>
+        <Button Content="Оценка произовдства" HorizontalAlignment="Left" Margin="363,404,0,0" VerticalAlignment="Top" Width="140" Click="CreateSquareMatrixButton_Click"/>
         <Grid HorizontalAlignment="Left" Height="18" VerticalAlignment="Top" Width="18" Margin="187,21,0,0" MouseLeftButtonDown="Grid_MouseLeftButtonDown">
             <Ellipse HorizontalAlignment="Left" Height="17" Stroke="Black" VerticalAlignment="Top" Width="17" Cursor="Hand" Fill="Black"/>
             <Label Content="i" HorizontalAlignment="Left" VerticalAlignment="Top" IsEnabled="False" Width="13" Margin="2,-5,0,0" Foreground="White"/>
@@ -50,15 +50,12 @@
             </TreeView>
 
         </Grid>
-        <Label Content="Отображение" HorizontalAlignment="Left" Margin="508,20,0,0" VerticalAlignment="Top"/>
+        <Label Content="Отображение" HorizontalAlignment="Left" Margin="508,20,0,0" VerticalAlignment="Top" />
         <Button Content="Перейти в подсистему" HorizontalAlignment="Left" Margin="375,48,0,0" VerticalAlignment="Top"/>
         <Button Content="Сохранить изменения" HorizontalAlignment="Left" Margin="20,80,0,0" VerticalAlignment="Top" Width="140" Click="Button_Click"/>
         <TextBox x:Name="ElementTextBox" HorizontalAlignment="Left" Margin="20,111,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120" TextChanged="TextBox_TextChanged"/>
-
-        <Button Content="Создать матрицу системы" 
-        Click="CreateSquareMatrixButton_Click"
-        Margin="349,80,0,334"
-        HorizontalAlignment="Left"
-        Width="154"/>
+        <Button Content="Создать матрицу системы" HorizontalAlignment="Left" Margin="340,80,0,0" VerticalAlignment="Top" Width="163"/>
+        <Button Content="Удалить элемент" HorizontalAlignment="Left" Height="26" Margin="400,111,0,0" VerticalAlignment="Top" Width="103" Click="Button_Click_1"/>
+        <Button Content="Excel" HorizontalAlignment="Left" Margin="20,389,0,0" VerticalAlignment="Top" Width="140" Click="Button_Click_3"/>
     </Grid>
 </Window>
