@@ -23,7 +23,7 @@ namespace KPMay
     {
         AD_Sqlite ad_sqlite = new AD_Sqlite();
         AD_APP ad_app = new AD_APP();
-        string project_file_path =  AD_General.ConvertEnviromentPatToPath("%TEMP%\\KorabelProFit\\");
+        string project_file_path =  AD_General.ConvertEnviromentPatToPath("%TEMP%\\KorabelProFit\\combineTemp.xml");
         string db_path = AD_General.ConvertEnviromentPatToPath("%APPDATA%\\KorabelProFit\\");
         string db_name = "KBPdb";
         public MainWindow()
@@ -53,7 +53,7 @@ namespace KPMay
             model.dbPath = db_path;
             model.dbName = db_name;
             AD_XML ad_xml = new AD_XML();
-            ad_xml.CreateXML(System.IO.Path.Combine(project_file_path, "combineTemp.xml"));
+            ad_xml.CreateXML(project_file_path);
             Redaction taskWindow = new Redaction(model);
             taskWindow.Show();
         }
