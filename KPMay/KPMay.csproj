@@ -95,6 +95,7 @@
     <Compile Include="AD\AD_Sqlite.cs" />
     <Compile Include="AD\AD_General.cs" />
     <Compile Include="AD\AD_APP.cs" />
+    <Compile Include="AD\ProjectModel.cs" />
     <Compile Include="CulcSomthing.xaml.cs">
       <DependentUpon>CulcSomthing.xaml</DependentUpon>
     </Compile>
@@ -107,7 +108,6 @@
     <Compile Include="PopUp.xaml.cs">
       <DependentUpon>PopUp.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ProjectModel.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
