@@ -76,7 +76,7 @@ namespace KPMay
         public XmlNode GetNodeByKey((string name, string value) Key)
         {
             try
-            { 
+            {
                 return _doc.SelectSingleNode($"//*[@{Key.name}=\"{Key.value}\"]"); 
             }
             catch

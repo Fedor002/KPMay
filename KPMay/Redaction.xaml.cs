@@ -34,6 +34,7 @@ namespace KPMay
         string _system_integration_level_path = _io.Path.Combine(AppContext.BaseDirectory, "integration_readiness_level.jpg");
         string _system_technology_level_path = _io.Path.Combine(AppContext.BaseDirectory, "technology_readiness_level.jpg");
         string _system_production_level_path = _io.Path.Combine(AppContext.BaseDirectory, "production_readiness_level.jpg");
+        custom_system selectedNodeC;
 
         ProjectModel model;
         AD_XML XML = new AD_XML();
@@ -99,7 +100,7 @@ namespace KPMay
 
             double N = calc.MakeTheFunny();
 
-            custom_system selectedNode = (custom_system)treeView1.SelectedItem;
+            custom_system selectedNode = selectedNodeC;
 
             int i = 0;
 
@@ -131,7 +132,25 @@ namespace KPMay
 
             double N = calc.MakeTheFunny();
 
-            custom_system selectedNode = (custom_system)treeView1.SelectedItem;
+            custom_system selectedNode = selectedNodeC;
+
+            int i = 0;
+
+            List<double> vector = new List<double>();
+
+
+            foreach (var element in _vectorValues)
+            {
+                vector.Add(element.Value);
+
+            }
+
+            foreach (custom_system el in selectedNode.Nodes)
+            {
+                XML.AddUniqueChildToNodeById((ct.technology_grade, vector[i].ToString()), (ct.id, el.Id));
+                XML.SaveXML();
+                i++;
+            }
 
             XML.AddUniqueChildToNodeById((ct.technology_grade, N.ToString()), (ct.id, selectedNode.Id));
             XML.SaveXML();
@@ -149,7 +168,7 @@ namespace KPMay
             }
             if (treeView1.SelectedItem != null)
             {
-                custom_system selectedNode = (custom_system)treeView1.SelectedItem;
+                custom_system selectedNode = selectedNodeC;
                 XmlElement newNode = XML.doc.CreateElement(ct.subsystem);
                 XmlNode name = XML.doc.CreateElement(ct.name);
                 name.InnerText = newNodeName;
@@ -157,6 +176,15 @@ namespace KPMay
                 XML.SetAttributeToElement(newNode, (ct.id, newId));
 
                 newNode.AppendChild(name);
+
+                XmlNode lvl = XML.doc.CreateElement(ct.lvl);
+                lvl.InnerText = ((int)selectedNode.lvl + 1).ToString();
+                newNode.AppendChild(lvl);
+
+                XmlNode critT = XML.doc.CreateElement(ct.critical_technology);
+                critT.InnerText = "critical_technology";
+                newNode.AppendChild(critT);
+
                 XML.GetNodeByKey((ct.id, selectedNode.Id)).AppendChild(newNode);
                 XML.SaveXML();
                 MessageBox.Show("Новый узел успешно добавлен!");
@@ -169,6 +197,15 @@ namespace KPMay
                 XML.SetAttributeToElement(newNode, (ct.id, "0"));
                 newNode.AppendChild(name);
                 XML.doc.DocumentElement.AppendChild(newNode);
+
+                XmlNode lvl = XML.doc.CreateElement(ct.lvl);
+                lvl.InnerText = "1";
+                newNode.AppendChild(lvl);
+
+                XmlNode critT = XML.doc.CreateElement(ct.critical_technology);
+                critT.InnerText = "critical_technology";
+                newNode.AppendChild(critT);
+
                 XML.SaveXML();
                 MessageBox.Show("Новый узел успешно добавлен!");
             }
@@ -209,9 +246,10 @@ namespace KPMay
             taskWindow.Show();
 
         }
-
-        private void Grid_MouseLeftButtonDownIn1(object sender, RoutedEventArgs e)
+        
+        /*private void Grid_MouseLeftButtonDownIn1(object sender, RoutedEventArgs e)
         {
+            
 
             try
             {
@@ -262,7 +300,7 @@ namespace KPMay
                 MessageBox.Show($"Не удалось открыть файл: {ex.Message}");
             }
 
-        }
+        }*/
 
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
@@ -279,7 +317,7 @@ namespace KPMay
         {
             // Получаем названия корневых узлов
             var rootNames = new List<string>();
-            custom_system selectedNode = (custom_system)treeView1.SelectedItem;
+            custom_system selectedNode = selectedNodeC;
             foreach (custom_system node in selectedNode.Nodes)
             {
                 rootNames.Add(node.Name);
@@ -295,10 +333,12 @@ namespace KPMay
             
             MatrixContext = new SquareMatrix(size, rootNames);
 
-            if (selectedNode.enterprise_matrix != null)
-            {
-                MatrixContext._matrix = selectedNode.enterprise_matrix;
-            }
+                string senderName = (sender as FrameworkElement)?.Name;
+                if (senderName == "enterprise" && selectedNode.enterprise_matrix != null)
+                    MatrixContext._matrix = selectedNode.enterprise_matrix;
+                else if (senderName == "technology" && selectedNode.technology_matrix != null)
+                    MatrixContext._matrix = selectedNode.technology_matrix;
+
  /*           else
             {
                 double[,] matrixEmpty = new double[size, size]
@@ -326,7 +366,7 @@ namespace KPMay
         {
             // Получаем названия корневых узлов
             var rootNames = new List<string>();
-            custom_system selectedNode = (custom_system)treeView1.SelectedItem;
+            custom_system selectedNode = selectedNodeC;
             foreach (custom_system node in selectedNode.Nodes) 
             { 
                 rootNames.Add(node.Name); // Используем свойство Name из AD_Tree
@@ -425,8 +465,9 @@ namespace KPMay
 
         private void ShowVectorInput(SquareMatrix matrix, object sender)
         {
+            string senderName = (sender as FrameworkElement)?.Name;
             var rootNames = new List<string>();
-            custom_system selectedNode = (custom_system)treeView1.SelectedItem;
+            custom_system selectedNode = selectedNodeC;
             foreach (custom_system node in selectedNode.Nodes)
             {
                 rootNames.Add(node.Name);
@@ -437,8 +478,10 @@ namespace KPMay
             foreach (custom_system node in selectedNode.Nodes)
             {
                 double value = 0.0;
-                if (!string.IsNullOrEmpty(Convert.ToString(node.enterprise_grade)))
+                if (!string.IsNullOrEmpty(Convert.ToString(node.enterprise_grade)) && senderName == "enterprise")
                     value = node.enterprise_grade;
+                else if (!string.IsNullOrEmpty(Convert.ToString(node.technology_grade)) && senderName == "technology")
+                    value = node.technology_grade;
                 _vectorValues[node.Name] = value;
             }
 
@@ -488,7 +531,7 @@ namespace KPMay
             };
 
             // Выбор метода по Name у sender
-            string senderName = (sender as FrameworkElement)?.Name;
+
             if (senderName == "enterprise")
                 vectorWindow.Closed += (s, e) => CalcTechnoE(null, null);
             else if (senderName == "technology")
@@ -521,7 +564,7 @@ namespace KPMay
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
-            custom_system selectedNode = (custom_system)treeView1.SelectedItem;
+            custom_system selectedNode = selectedNodeC;
 
             XmlNode node = XML.doc.SelectSingleNode($"//*[@id='{selectedNode.Id}']");
             if (node != null && node.ParentNode != null)
@@ -575,6 +618,7 @@ namespace KPMay
 
         private void mi_save_file_Click(object sender, RoutedEventArgs e)
         {
+            
             AD_APP.SaveAdFile(model.currentPath, model.tempPath);
         }
 
@@ -637,7 +681,14 @@ namespace KPMay
         private void mi_open_file_Click(object sender, RoutedEventArgs e)
         {
             model.currentPath = AD_APP.OpenAdFile(model.tempPath);
+            XML.LoadXML(model.tempPath);
             nodes = XML.GetSystemFromXml().Nodes;
+            ReloadTreeView();
+        }
+
+        private void treeView1_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        {
+            selectedNodeC = (custom_system)treeView1.SelectedItem;
         }
     }
 

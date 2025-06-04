@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.IO;
+//using Microsoft.Office.Interop.Excel;
 
 namespace KPMay
 {
@@ -56,6 +57,23 @@ namespace KPMay
             ad_xml.CreateXML(model.tempPath);
             Redaction taskWindow = new Redaction(model);
             taskWindow.Show();
+        }
+
+        private void MenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            ProjectModel model = new ProjectModel();
+            
+            model.tempPath = System.IO.Path.Combine(project_file_path, "combineTemp.xml");
+            model.dbPath = db_path;
+            model.dbName = db_name;
+            model.currentPath = AD_APP.OpenAdFile(model.tempPath);
+
+            if (model.currentPath != null)
+            {
+                Redaction taskWindow = new Redaction(model);
+                taskWindow.Show();
+            }
+
         }
     }
 }

@@ -45,7 +45,7 @@
 
         </Grid>
         <Grid HorizontalAlignment="Left" VerticalAlignment="Top" Margin="507,44,0,0" Height="376" Width="282" Grid.Row="1">
-            <TreeView x:Name="treeView1">
+            <TreeView x:Name="treeView1" SelectedItemChanged="treeView1_SelectedItemChanged">
                 <TreeView.ItemTemplate>
                     <HierarchicalDataTemplate ItemsSource="{Binding Path=Nodes}">
                         <TextBlock Text="{Binding Name}" />
