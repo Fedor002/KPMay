@@ -5,21 +5,21 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:KPMay"
         mc:Ignorable="d"
-        Title="Settiings" Height="450" Width="800">
+        Title="Settiings" Height="367" Width="244">
     <Grid>
-        <TabControl TabStripPlacement="Left">
-            <TabItem Header="Пользователь" Margin="0,0,0,0" HorizontalContentAlignment="Stretch">
+        <TabControl TabStripPlacement="Left" >
+            <TabItem Header="Пользователь" Margin="0,0,0,0" HorizontalContentAlignment="Stretch" Width="0">
                 <Grid Background="#FFE5E5E5">
-                    <TextBox x:Name="tb_fio" HorizontalAlignment="Left" Height="25" Margin="27,83,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="180" local:TBHelper.Placeholder="ФИО"/>
-                    <TextBox x:Name="tb_job_title" HorizontalAlignment="Left" Height="25" Margin="27,144,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="180"/>
-                    <TextBox x:Name="tb_enterprise" HorizontalAlignment="Left" Height="25" Margin="27,207,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="180"/>
+                    <TextBox Text="{Binding project_properties.FIO}" x:Name="tb_fio" HorizontalAlignment="Left" Height="25" Margin="27,83,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="180" />
+                    <TextBox Text="{Binding project_properties.job}" x:Name="tb_job_title" HorizontalAlignment="Left" Height="25" Margin="27,144,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="180"/>
+                    <TextBox Text="{Binding project_properties.enterprise}" x:Name="tb_enterprise" HorizontalAlignment="Left" Height="25" Margin="27,207,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="180"/>
                     <Label Content="ФИО входящего" HorizontalAlignment="Left" Margin="27,57,0,0" VerticalAlignment="Top" Cursor=""/>
                     <Label Content="Должность" HorizontalAlignment="Left" Margin="27,118,0,0" VerticalAlignment="Top"/>
                     <Label Content="Организация" HorizontalAlignment="Left" Margin="27,180,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.603,2.426"/>
                     <Button x:Name="bt_save" Content="Сохранить" HorizontalAlignment="Left" Margin="29,255,0,0" VerticalAlignment="Top" Height="26" Width="80" Click="bt_save_Click"/>
                 </Grid>
             </TabItem>
-            <TabItem Header="TabItem">
+            <TabItem Header="TabItem" Width="0">
                 <Grid Background="#FFE5E5E5"/>
             </TabItem>
         </TabControl>

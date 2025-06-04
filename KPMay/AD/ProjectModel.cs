@@ -19,30 +19,30 @@ namespace KPMay
         public string enterprise
         {
             get { return _enterprise; }
-            set { _enterprise = value; }
+            set { _enterprise = value; OnPropertyChanged(nameof(enterprise)); }
         }
 
         public string job
         {
             get { return _job; }
-            set { _job = value; } 
+            set { _job = value; OnPropertyChanged(nameof(job)); } 
         }
         public string FIO
         {
             get { return _FIO; }
-            set { _FIO = value; }
+            set { _FIO = value; OnPropertyChanged(nameof(FIO)); }
         }
 
         public string VVST_class
         {
             get { return _VVST_class; }
-            set { _VVST_class = value; }
+            set { _VVST_class = value; OnPropertyChanged(nameof(VVST_class)); }
         }
 
         public string VVST_name
         {
             get { return _VVST_name; }
-            set { _VVST_name = value; }
+            set { _VVST_name = value; OnPropertyChanged(nameof(VVST_name)); }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

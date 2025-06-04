@@ -20,21 +20,27 @@ namespace KPMay
     public partial class Settiings : Window
     {
         AD_APP ad_app = new AD_APP();
-        string path = "%APPDATA%\\KorabelProFit";
-        string dbname = "TestDB";
+        ProjectModel model;
         public Settiings()
         {
             InitializeComponent();
-            tb_fio.Text = ad_app.ReadAllUsers(path, dbname).FirstOrDefault() is var user && user != default ? user.FIO : string.Empty;
-            tb_enterprise.Text = ad_app.ReadAllEnterprises(path, dbname).FirstOrDefault() is var ent && ent != default ? ent.name : string.Empty;
-            tb_job_title.Text = ad_app.ReadAllJobs(path, dbname).FirstOrDefault() is var job && job != default ? job.name : string.Empty;
+            tb_fio.Text = ad_app.ReadAllUsers(model.dbPath, model.dbName).FirstOrDefault() is var user && user != default ? user.FIO : string.Empty;
+            tb_enterprise.Text = ad_app.ReadAllEnterprises(model.dbPath, model.dbName).FirstOrDefault() is var ent && ent != default ? ent.name : string.Empty;
+            tb_job_title.Text = ad_app.ReadAllJobs(model.dbPath, model.dbName).FirstOrDefault() is var job && job != default ? job.name : string.Empty;
+        }
+
+        public Settiings(ProjectModel model)
+        {
+            this.model = model;
+            InitializeComponent();
+            this.DataContext = model;
         }
 
         private void bt_save_Click(object sender, RoutedEventArgs e)
         {
-            ad_app.InsertOrUpdateEnterprise(tb_enterprise.Text, path, dbname);
-            ad_app.InsertOrUpdateUser(tb_fio.Text, path, dbname);
-            ad_app.InsertOrUpdateJob(tb_job_title.Text, path, dbname);
+            ad_app.InsertOrUpdateEnterprise(tb_enterprise.Text, model.dbPath, model.dbName);
+            ad_app.InsertOrUpdateUser(tb_fio.Text, model.dbPath, model.dbName);
+            ad_app.InsertOrUpdateJob(tb_job_title.Text, model.dbPath, model.dbName);
         }
     }
 }

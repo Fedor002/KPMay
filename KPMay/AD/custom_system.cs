@@ -23,51 +23,51 @@ namespace KPMay
         public string Name
         {
             get { return _name; }
-            set { _name = value; }
+            set { _name = value; OnPropertyChanged(nameof(Name)); }
         }
 
         public string Id
         {
             get { return _id; }
-            set { _id = value; }
+            set { _id = value; OnPropertyChanged(nameof(Id)); }
         }
         public int lvl
         {
             get { return _lvl; }
-            set { _lvl = value; }
+            set { _lvl = value; OnPropertyChanged(nameof(lvl)); }
         }
 
         public string criticalTechnology
         {
             get { return _critical_technology; }
-            set { _critical_technology = value; }
+            set { _critical_technology = value; OnPropertyChanged(nameof(criticalTechnology)); }
         }
         public ObservableCollection<custom_system> Nodes
         {
             get { return _children; }
-            set { _children = value; }
+            set { _children = value; OnPropertyChanged(nameof(Nodes)); }
         }
         public double[,] enterprise_matrix
         {
             get { return _enterprise_matrix; }
-            set { _enterprise_matrix = value; }
+            set { _enterprise_matrix = value; OnPropertyChanged(nameof(enterprise_matrix)); }
         }
         public double[,] technology_matrix
         {
             get { return _technology_matrix; }
-            set { _technology_matrix = value; }
+            set { _technology_matrix = value; OnPropertyChanged(nameof(technology_matrix)); }
         }
 
         public double enterprise_grade
         {
             get { return _enterprise_grade; }
-            set { _enterprise_grade = value; }
+            set { _enterprise_grade = value; OnPropertyChanged(nameof(enterprise_grade)); }
         }
 
         public double technology_grade
         {
             get { return _technology_grade; }
-            set { _technology_grade = value; }
+            set { _technology_grade = value; OnPropertyChanged(nameof(technology_grade)); }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
