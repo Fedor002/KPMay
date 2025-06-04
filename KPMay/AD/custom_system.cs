@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace KPMay
 {
-    public class custom_system
+    public class custom_system : INotifyPropertyChanged
     {
         private string _name { get; set; }
         private ObservableCollection<custom_system> _children { get; set; } = new ObservableCollection<custom_system>();
@@ -68,6 +69,11 @@ namespace KPMay
             get { return _technology_grade; }
             set { _technology_grade = value; }
         }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected void OnPropertyChanged(string propertyName) =>
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
     public class CustomTags 
     {
