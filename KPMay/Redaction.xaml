@@ -13,12 +13,13 @@
         </Grid.RowDefinitions>
         <Label Content="Наименование проекта" HorizontalAlignment="Left" Margin="19,11,0,0" VerticalAlignment="Top" FontSize="14" Grid.Row="1"/>
         <TextBox HorizontalAlignment="Left" Margin="19,45,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120" Grid.Row="1"/>
-        <Button Content="Добавить Уровень" HorizontalAlignment="Left" Margin="19,133,0,0" VerticalAlignment="Top" Width="120" Click="Button_Click" Grid.Row="1"/>
-        <ComboBox HorizontalAlignment="Left" Margin="19,307,0,0" VerticalAlignment="Top" Width="120" IsDropDownOpen="True" Grid.Row="1">
-            <ComboBoxItem Content="Вид отчета 1"/>
-            <ComboBoxItem Content="Вид отчета 2"/>
-            <ComboBoxItem Content="Вид отчета 3"/>
-            <ComboBoxItem Content="Вид отчета 4"/>
+        <Button Content="Добавить Уровень" HorizontalAlignment="Left" Margin="19,168,0,0" VerticalAlignment="Top" Width="120" Click="Button_Click" Grid.Row="1"/>
+        <ComboBox x:Name="_ChooseLevel" HorizontalAlignment="Left" Margin="19,307,0,0" VerticalAlignment="Top" Width="120" IsDropDownOpen="True" Grid.Row="1">
+            <ComboBoxItem Content="Уровень 1"/>
+            <ComboBoxItem Content="Уровень 2"/>
+            <ComboBoxItem Content="Уровень 3"/>
+            <ComboBoxItem Content="Уровень 4"/>
+            <ComboBoxItem Content="Уровень 5"/>
         </ComboBox>
         <Button Content="Сформировать Отчет" HorizontalAlignment="Left" Margin="19,350,0,0" VerticalAlignment="Top" Width="140" Click="Button_Click_2" Grid.Row="1" />
         <Button x:Name="enterprise" Content="Оценка технологий" HorizontalAlignment="Left" Margin="362,350,0,0" VerticalAlignment="Top" Width="140" Click="CreateSquareMatrixButton_Click" Grid.Row="1"/>
@@ -73,5 +74,6 @@
                 </Menu>
             </ToolBar>
         </ToolBarTray>
+        <TextBox x:Name="ElementTextBox_Copy" HorizontalAlignment="Left" Margin="19,137,0,0" TextWrapping="Wrap" Text="{Binding systems.criticalTechnology}" VerticalAlignment="Top" Width="120" TextChanged="TextBox_TextChanged" Grid.Row="1" local:TBHelper.Placeholder="КТ"/>
     </Grid>
 </Window>

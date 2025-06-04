@@ -193,7 +193,7 @@ namespace KPMay
                 newNode.AppendChild(lvl);
 
                 XmlNode critT = XML.doc.CreateElement(ct.critical_technology);
-                critT.InnerText = "critical_technology";
+                critT.InnerText = model.systems.criticalTechnology;
                 newNode.AppendChild(critT);
 
                 XML.GetNodeByKey((ct.id, selectedNode.Id)).AppendChild(newNode);
@@ -554,26 +554,38 @@ namespace KPMay
                 class_table.Rows[1].Cells[0].Paragraphs.First().Append("Наименование перспективного образца ВВСИ").Bold();
 
                 class_table.Rows[0].Cells[1].Paragraphs.First().Append(model.project_properties.VVST_class);
-                class_table.Rows[1].Cells[1].Paragraphs.First().Append(tree.Nodes[0].Name.ToString());
+                class_table.Rows[1].Cells[1].Paragraphs.First().Append(model.project_properties.VVST_name);
 
                 document.InsertTable(class_table);
 
                 document.InsertParagraph("");
-                document.InsertParagraph("Комплексная оценка проектных и производственных уровней готовности").FontSize(16).Italic();
+                document.InsertParagraph("Структурная функционально-техническая схема система").FontSize(16).Italic();
 
-                /*int countLeafNodes = CountLeafNodes(nodes);
-                List<string> endNodesValues = GetLeafEndValues(nodes);*/
-                int need_level = 1;
+                int need_level;
+
+                if (_ChooseLevel.SelectedItem != null)
+                {
+                    string[] parts = _ChooseLevel.SelectedItem.ToString().Split(' ');
+                    need_level = int.Parse(parts[2]);
+                    need_level += 1;
+                }
+                else
+                {
+                    need_level = 2;
+                }
+
                 var (count_by_level, value_by_level) = GetNodesByLevel(model.systems.Nodes, need_level);
                 var nodesWithParents = GetNodesWithParentsByLevel(model.systems.Nodes, targetLevel: need_level, currentParent: null);
+                var nodesWithParents_IT = GetNodesWithParentsByLevel_It(model.systems.Nodes, targetLevel: need_level, currentParent: null);
 
                 // Создаём таблицу
-                Xceed.Document.NET.Table big_assessment = document.AddTable(2+ count_by_level, 3); // +1 для заголовка
+                Xceed.Document.NET.Table big_assessment = document.AddTable(2+count_by_level, 3); // +1 для заголовка
                 big_assessment.Design = TableDesign.TableGrid;
 
                 big_assessment.Rows[0].Cells[0].Paragraphs.First().Append("Наименование типового образца ВВТ").Bold();
                 big_assessment.Rows[0].Cells[1].Paragraphs.First().Append("Наименование составной части").Bold();
                 big_assessment.Rows[1].Cells[0].Paragraphs.First().Append(tree.Nodes[0].Name);
+                big_assessment.Rows[0].Cells[1].Width = big_assessment.Rows[1].Cells[1].Width;
                 big_assessment.Rows[1].Cells[1].Paragraphs.First().Append((need_level - 1).ToString() + "-й уровень");
                 big_assessment.Rows[1].Cells[2].Paragraphs.First().Append((need_level).ToString() + "-й уровень");
 
@@ -595,17 +607,42 @@ namespace KPMay
                 document.InsertTable(big_assessment);
                 document.InsertParagraph("");
 
-                /*// Создаём таблицу
-                Xceed.Document.NET.Table final_assessment = document.AddTable(2, 1); // +1 для заголовка
+                Xceed.Document.NET.Table final_assessment = document.AddTable(2+count_by_level, 7); // +1 для заголовка
                 final_assessment.Design = TableDesign.TableGrid;
 
-                // Заголовки
-                final_assessment.Rows[0].Cells[0].Paragraphs.First().Append("Расчёт КУГ").Bold();
+                document.InsertParagraph("Комплексная оценка проектных и производственных уровней готовности").FontSize(16).Italic();
 
-                final_assessment.Rows[1].Cells[0].Paragraphs.First().Append("ЗАГЛУШКА_КУГ");
+                // Заголовки
+                final_assessment.Rows[0].Cells[0].Paragraphs.First().Append("Наименование составной части образца ВВСТ").Bold();
+                final_assessment.Rows[1].Cells[0].Paragraphs.First().Append((need_level - 1).ToString() + "-й уровень").Bold();
+                final_assessment.Rows[1].Cells[1].Paragraphs.First().Append("Расчёт УГПТ").Bold();
+                final_assessment.Rows[1].Cells[2].Paragraphs.First().Append((need_level).ToString() + "-й уровень").Bold();
+                final_assessment.Rows[1].Cells[3].Paragraphs.First().Append("Расчёт УГН").Bold();
+                final_assessment.Rows[0].Cells[4].Paragraphs.First().Append("Критические технологии").Bold();
+                final_assessment.Rows[0].Cells[5].Paragraphs.First().Append("Оценка УГТ").Bold();
+                final_assessment.Rows[0].Cells[6].Paragraphs.First().Append("Оценка УГП").Bold();
+
+                for (int i = 0; i < count_by_level; i++)
+                {
+                    final_assessment.Rows[2 + i].Cells[0].Paragraphs.First().Append(nodesWithParents_IT[i].Parent.Name);
+                    final_assessment.Rows[2 + i].Cells[1].Paragraphs.First().Append(nodesWithParents_IT[i].Parent.enterprise_grade.ToString());
+                    final_assessment.Rows[2 + i].Cells[2].Paragraphs.First().Append(nodesWithParents_IT[i].Node.Name);
+                    final_assessment.Rows[2 + i].Cells[3].Paragraphs.First().Append(nodesWithParents_IT[i].Node.enterprise_grade.ToString());
+                    final_assessment.Rows[2 + i].Cells[4].Paragraphs.First().Append(nodesWithParents_IT[i].Node.criticalTechnology);
+                    final_assessment.Rows[2 + i].Cells[5].Paragraphs.First().Append(nodesWithParents_IT[i].Node.technology_grade.ToString());
+                    final_assessment.Rows[2 + i].Cells[6].Paragraphs.First().Append(nodesWithParents_IT[i].Node.enterprise_grade.ToString());
+                }
+
+                final_assessment.MergeCellsInColumn(4, 0, 1);
+                final_assessment.MergeCellsInColumn(5, 0, 1);
+                final_assessment.MergeCellsInColumn(6, 0, 1);
+                final_assessment.MergeCellsInColumn(0, 2, (2+count_by_level-1));
+                final_assessment.MergeCellsInColumn(1, 2, (2 + count_by_level - 1));
+                final_assessment.Rows[0].MergeCells(0, 3);
+
 
                 document.InsertTable(final_assessment);
-                document.InsertParagraph("");*/
+                document.InsertParagraph("");
 
                 document.InsertParagraph("Данные об эксперте").FontSize(16).Italic();
 
@@ -840,6 +877,30 @@ namespace KPMay
                 {
                     // Рекурсивно передаём текущий узел как родитель для детей
                     result.AddRange(GetNodesWithParentsByLevel(node.Nodes, targetLevel, node));
+                }
+            }
+
+            return result;
+        }
+
+        public List<(custom_system Parent, custom_system Node)> GetNodesWithParentsByLevel_It(
+    ObservableCollection<custom_system> nodes,
+    int targetLevel,
+    custom_system currentParent = null)
+        {
+            var result = new List<(custom_system, custom_system)>();
+
+            foreach (var node in nodes)
+            {
+                if (node.lvl == targetLevel)
+                {
+                    result.Add((currentParent, node)); // Добавляем объекты, а не строки
+                }
+
+                if (node.Nodes != null && node.Nodes.Count > 0)
+                {
+                    // Рекурсивно передаём текущий узел как родитель для детей
+                    result.AddRange(GetNodesWithParentsByLevel_It(node.Nodes, targetLevel, node));
                 }
             }
 
