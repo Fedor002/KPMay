@@ -13,8 +13,8 @@ namespace KPMay
 {
     public class AD_XML
     {
-        private XmlDocument _doc  ;
-        private string _path  ;
+        private XmlDocument _doc;
+        private string _path;
 
         public XmlDocument doc
         {
@@ -73,18 +73,19 @@ namespace KPMay
         /// Метод находит узел по ключевому атрибуту.
         /// </summary>
         /// <param name="Key">Кортеж из названия узла и значения наприимер.("id", "0")</param>
-        public XmlNode GetNodeByKey((string name, string value) Key)
+        public XmlNode GetNodeByKey((string name, string value) Key, string tag_name = null)
         {
             try
             {
-                return _doc.SelectSingleNode($"//*[@{Key.name}=\"{Key.value}\"]"); 
+                string xpath = string.IsNullOrWhiteSpace(tag_name) ? $"//*[@{Key.name}=\"{Key.value}\"]" : $"//{tag_name}//*[@{Key.name}=\"{Key.value}\"]";
+                return _doc.SelectSingleNode(xpath);
             }
             catch
             {
                 throw new Exception($"Узел <c атрибутом{Key.name}=\"{Key.value}\"> не найден в XML.");
-            }          
+            }
         }
-        
+
         public XmlNode GetChildNode(XmlNode parent, string child_name)
         {
             return parent.SelectSingleNode(child_name);
@@ -107,14 +108,14 @@ namespace KPMay
             {
                 node.InnerText = value;
             }
-            else{}
+            else { }
         }
 
         /// <summary>
         /// Метод преобразует XmlNode в XmlElement, если это возможно.
         /// </summary>
         public XmlElement ConvertNodeToElement(XmlNode node)
-        { 
+        {
             if (node.NodeType == XmlNodeType.Element)
             {
                 return (XmlElement)node;
@@ -135,7 +136,7 @@ namespace KPMay
         /// </summary>
         /// <param name="node">Элемент, которому нужно установить значение, элемент XmlNode можно привести в XmlElement методом ConvertNodeToElement</param>
         /// <param name="attribute">Кортеж из названия атрибута и значения, наприимер.("id", "0")</param>
-        public void SetAttributeToElement(XmlElement node,(string name, string value) attribute)
+        public void SetAttributeToElement(XmlElement node, (string name, string value) attribute)
         {
             node.SetAttribute(attribute.name, attribute.value);
         }
@@ -180,7 +181,7 @@ namespace KPMay
                 parent.AppendChild(child);
             }
         }
-        public void AddMatrixToNode((string name,double[,] matrix) node, (string name, string value) id)
+        public void AddMatrixToNode((string name, double[,] matrix) node, (string name, string value) id)
         {
             int rows = node.matrix.GetLength(0);
             int cols = node.matrix.GetLength(1);
@@ -224,11 +225,11 @@ namespace KPMay
             {
                 return null;
             }
-            try 
+            try
             {
                 rows = int.Parse(node.Attributes["rows"].Value);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 throw new Exception($"не найден атрибут rows, возможно файл повреждён. {ex}");
             }
@@ -251,13 +252,13 @@ namespace KPMay
 
                 for (int j = 0; j < cols; j++)
                 {
-                    try 
+                    try
                     {
                         double cell_value = double.Parse(cell_nodes[j].InnerText, System.Globalization.NumberStyles.Float,
                                          System.Globalization.CultureInfo.InvariantCulture);
                         matrix[i, j] = cell_value;
                     }
-                    catch(Exception ex)
+                    catch (Exception ex)
                     {
                         throw new Exception($"Ошибка в ячейке [{i},{j}]: {ex}");
                     }
@@ -289,9 +290,11 @@ namespace KPMay
         /// Проверяет, существует ли тег в XML-файле по указанному пути.
         /// </summary>
         /// <returns>Возвращает false, если тег не найден, иначе true.</returns>
-        public bool TagExist(string tag_name)
+        public bool TagExist(string tag_name, string in_tag_name = null)
         {
-            if (_doc.DocumentElement.SelectSingleNode(tag_name) != null)
+            string xpath = string.IsNullOrWhiteSpace(in_tag_name) ? $"//{tag_name}" : $"//{in_tag_name}//{tag_name}";
+
+            if (_doc.DocumentElement.SelectSingleNode(xpath) != null)
             {
                 return true;
             }
@@ -332,7 +335,33 @@ namespace KPMay
             }
             return _result;
         }
+        public bool AttributeExist((string name, string value) attribute, string tag_name = null)
+        {
+            string xpath = string.IsNullOrWhiteSpace(tag_name) ? $"//*[@{attribute.name}=\"{attribute.value}\"]" : $"//{tag_name}//*[@{attribute.name}=\"{attribute.value}\"]";
+            if (_doc.SelectSingleNode(xpath) != null)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
 
+        public string GetTagValue(string tag_name, string in_tag_name = null)
+        {
+            string xpath = string.IsNullOrWhiteSpace(in_tag_name) ? $"//{tag_name}" : $"//{in_tag_name}//{tag_name}";
+
+            if (_doc.DocumentElement.SelectSingleNode(xpath) != null)
+            {
+                return _doc.SelectSingleNode(xpath).InnerText;
+            }
+            else
+            {
+                return null;
+            }
+        }
+        //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
         /// <summary>
         /// Метод читает значение первого попавшегося тега из XML-файла по указанному пути, подходит для xml с уникальными тегами.
         /// </summary>
@@ -395,6 +424,8 @@ namespace KPMay
             }
             return result;
         }
+
+
         //--------------------------------------------не универсальные методы-----------------------------------------------------------------------------------------
         private custom_system GetSystemFromXml(XmlNode xmlNode)
         {
@@ -425,6 +456,6 @@ namespace KPMay
         {
             custom_system tree = GetSystemFromXml(_doc.DocumentElement);
             return tree;
-        } 
+        }
     }
 }
