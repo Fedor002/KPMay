@@ -13,7 +13,6 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.IO;
-//using Microsoft.Office.Interop.Excel;
 
 namespace KPMay
 {

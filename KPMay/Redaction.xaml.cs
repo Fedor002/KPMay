@@ -19,6 +19,7 @@ using _io = System.IO;
 using System.Xml.Linq;
 using KPMay.MathHolder;
 using KPMay;
+using Excel = Microsoft.Office.Interop.Excel;
 
 namespace KPMay
 {
@@ -581,6 +582,7 @@ namespace KPMay
 
         private void Button_Click_3(object sender, RoutedEventArgs e)
         {
+            // 1. Собираем все системы и подсистемы
             custom_system root = XML.GetSystemFromXml();
             var systems = new List<custom_system>();
             void CollectSystems(custom_system node)
@@ -591,27 +593,37 @@ namespace KPMay
             }
             CollectSystems(root);
 
-            // 2. Формируем массив для Excel
-            string[,] data = new string[systems.Count + 1, 4];
-            data[0, 0] = "ID";
-            data[0, 1] = "Название";
-            data[0, 2] = "Оценка (enterprise)";
-            data[0, 3] = "Оценка (technology)";
+            // 2. Запускаем Excel и создаём новую книгу
+            var excelApp = new Excel.Application();
+            excelApp.Visible = false;
+            var workbook = excelApp.Workbooks.Add();
+            var worksheet = (Excel.Worksheet)workbook.Worksheets[1];
+
+            // 3. Заполняем заголовки
+            worksheet.Cells[1, 1] = "Название";
+            worksheet.Cells[1, 2] = "Оценка (technology)";
+            worksheet.Cells[1, 3] = "Оценка (enterprise)";
+            worksheet.Cells[1, 4] = "Уровень (lvl)";
+
+            // 4. Заполняем строки
             for (int i = 0; i < systems.Count; i++)
             {
-                data[i + 1, 0] = systems[i].Id;
-                data[i + 1, 1] = systems[i].Name;
-                data[i + 1, 2] = systems[i].enterprise_grade.ToString();
-                data[i + 1, 3] = systems[i].technology_grade.ToString();
+                worksheet.Cells[i + 2, 1] = systems[i].Name;
+                worksheet.Cells[i + 2, 2] = systems[i].technology_grade.ToString();
+                worksheet.Cells[i + 2, 3] = systems[i].enterprise_grade.ToString();
+                worksheet.Cells[i + 2, 3] = systems[i].lvl.ToString();
             }
 
-            // 3. Создаём новый Excel-файл и записываем данные
-            string excelPath = _io.Path.Combine(AppContext.BaseDirectory, "export.xlsx");
-            var excel = new AD_Excel(excelPath, 1);
-            excel.CreateNewFile(); // создаёт новый пустой файл и лист
-            excel.WriteRange(0, 0, data); // записываем данные с первой ячейки
-            excel.SaveAs(excelPath);      // сохраняем по нужному пути
-            excel.Close();
+            // 5. Сохраняем файл
+            string excelPath = _io.Path.Combine(AppContext.BaseDirectory, "export_from_xml.xlsx");
+            workbook.SaveAs(excelPath);
+            workbook.Close();
+            excelApp.Quit();
+
+            // 6. Освобождаем ресурсы
+            System.Runtime.InteropServices.Marshal.ReleaseComObject(worksheet);
+            System.Runtime.InteropServices.Marshal.ReleaseComObject(workbook);
+            System.Runtime.InteropServices.Marshal.ReleaseComObject(excelApp);
 
             MessageBox.Show("Данные успешно экспортированы в Excel!");
         }
