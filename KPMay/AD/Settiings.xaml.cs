@@ -41,6 +41,7 @@ namespace KPMay
             ad_app.InsertOrUpdateEnterprise(tb_enterprise.Text, model.dbPath, model.dbName);
             ad_app.InsertOrUpdateUser(tb_fio.Text, model.dbPath, model.dbName);
             ad_app.InsertOrUpdateJob(tb_job_title.Text, model.dbPath, model.dbName);
+            MessageBox.Show("Данные успешно сохранены!");
         }
     }
 }

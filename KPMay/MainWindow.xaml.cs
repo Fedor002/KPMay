@@ -13,6 +13,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.IO;
+using System.Xml;
+using System.Xml.Linq;
 
 namespace KPMay
 {
@@ -55,19 +57,60 @@ namespace KPMay
         }
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
-        {           
+        {
+            ProjectModel new_model = new ProjectModel();
+            new_model.project_properties = model.project_properties;
+            new_model.dbName = model.dbName;
+            new_model.dbPath = model.dbPath;
+            new_model.tempPath = model.tempPath;
             AD_XML ad_xml = new AD_XML();
+            model = new_model;
             ad_xml.CreateXML(model.tempPath);
+
+            XmlElement newNode = ad_xml.doc.CreateElement("project_properties");
+
+            XmlNode FIO = ad_xml.doc.CreateElement("FIO");
+            FIO.InnerText = model.project_properties.FIO;
+
+            XmlNode enterprise = ad_xml.doc.CreateElement("enterprise");
+            enterprise.InnerText = model.project_properties.enterprise;
+
+            XmlNode VVST_name = ad_xml.doc.CreateElement("VVST_name");
+            VVST_name.InnerText = model.project_properties.VVST_name;
+
+            XmlNode job = ad_xml.doc.CreateElement("job");
+            job.InnerText = model.project_properties.job;
+
+            XmlNode VVST_class = ad_xml.doc.CreateElement("VVST_class");
+            VVST_class.InnerText = model.project_properties.VVST_class;
+
+            newNode.AppendChild(FIO);
+            newNode.AppendChild(job);
+            newNode.AppendChild(enterprise);
+            newNode.AppendChild(VVST_class);
+            newNode.AppendChild(VVST_name);
+
+            ad_xml.doc.DocumentElement.AppendChild(newNode);
+
+            ad_xml.SaveXML();
+
             Redaction taskWindow = new Redaction(model);
             taskWindow.Show();
         }
 
         private void MenuItem_Click(object sender, RoutedEventArgs e)
-        {                     
+        {
+            AD_XML xml = new AD_XML();
             model.currentPath = AD_APP.OpenAdFile(model.tempPath);
-
             if (model.currentPath != null)
             {
+                xml.LoadXML(model.currentPath);
+                model.project_properties.VVST_name = xml.GetTagValue("VVST_name", "project_properties");
+                model.project_properties.VVST_class = xml.GetTagValue("VVST_class", "project_properties");
+                model.project_properties.enterprise = xml.GetTagValue("enterprise", "project_properties");
+                model.project_properties.FIO = xml.GetTagValue("FIO", "project_properties");
+                model.project_properties.job = xml.GetTagValue("job", "project_properties");
+                model.systems = xml.GetSystemFromXml();
                 Redaction taskWindow = new Redaction(model);
                 taskWindow.Show();
             }

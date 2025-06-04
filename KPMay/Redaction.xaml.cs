@@ -33,6 +33,18 @@ namespace KPMay
 
     public partial class Redaction : Window
     {
+        private void ExpandAll(ItemsControl parent)
+        {
+            foreach (var item in parent.Items)
+            {
+                if (parent.ItemContainerGenerator.ContainerFromItem(item) is TreeViewItem tvi)
+                {
+                    tvi.IsExpanded = true;
+                    ExpandAll(tvi); // рекурсивно
+                }
+            }
+        }
+
         string _system_xml_path = _io.Path.Combine(AppContext.BaseDirectory, "test.xml");
         string _system_report_path = _io.Path.Combine(AppContext.BaseDirectory, "test.docx");
         string _system_integration_level_path = _io.Path.Combine(AppContext.BaseDirectory, "integration_readiness_level.jpg");
@@ -51,19 +63,14 @@ namespace KPMay
             InitializeComponent();
 
             this.model = model;
-
+            this.DataContext = model;
             XML.LoadXML(model.tempPath);
 
-            custom_system tree = XML.GetSystemFromXml();
-            nodes = tree.Nodes;
+            //custom_system tree = XML.GetSystemFromXml();
+            //nodes = tree.Nodes;
             List<string> ids = XML.GetAllAttributeValues(new[] { ct.system, ct.subsystem }, ct.id);
-            treeView1.ItemsSource = nodes;
-            foreach (var item in treeView1.Items)
-            {
-                var tvi = treeView1.ItemContainerGenerator.ContainerFromItem(item) as TreeViewItem;
-                if (tvi != null)
-                    tvi.IsExpanded = true; // или true, если нужно развернуть
-            }
+            // treeView1.ItemsSource = nodes;
+            this.Loaded += (s, e) => ExpandAll(treeView1);
         }
 
         string filePath = _io.Path.Combine(AppContext.BaseDirectory, "InstactionsForFillingMatrix.docx");
@@ -203,7 +210,7 @@ namespace KPMay
                 XML.doc.DocumentElement.AppendChild(newNode);
 
                 XmlNode lvl = XML.doc.CreateElement(ct.lvl);
-                lvl.InnerText = "0";
+                lvl.InnerText = "1";
                 newNode.AppendChild(lvl);
 
                 XmlNode critT = XML.doc.CreateElement(ct.critical_technology);
@@ -214,22 +221,14 @@ namespace KPMay
                 MessageBox.Show("Новый узел успешно добавлен!");
             }
             ReloadTreeView();
+            selectedNodeC = (custom_system)treeView1.Items[0];
             ElementTextBox.Text = string.Empty;
         }
 
         private void ReloadTreeView()
         {
-            custom_system tree = XML.GetSystemFromXml();
-            nodes = tree.Nodes;
-
-            treeView1.ItemsSource = null; 
-            treeView1.ItemsSource = nodes;
-            foreach (var item in treeView1.Items)
-            {
-                var tvi = treeView1.ItemContainerGenerator.ContainerFromItem(item) as TreeViewItem;
-                if (tvi != null)
-                    tvi.IsExpanded = true; // или true, если нужно развернуть
-            }
+            model.systems = XML.GetSystemFromXml();
+            ExpandAll(treeView1);
         }
 
         private void Grid_MouseLeftButtonDown(object sender, RoutedEventArgs e)
@@ -536,7 +535,7 @@ namespace KPMay
         private void Button_Click_2(object sender, RoutedEventArgs e)
         {
             //Создание отчёта
-            custom_system tree = XML.GetSystemFromXml();
+            custom_system tree = model.systems;
 
             using (DocX document = DocX.Create(_system_report_path))
             {
@@ -554,7 +553,7 @@ namespace KPMay
                 class_table.Rows[0].Cells[0].Paragraphs.First().Append("Класс ВВСТ").Bold();
                 class_table.Rows[1].Cells[0].Paragraphs.First().Append("Наименование перспективного образца ВВСИ").Bold();
 
-                class_table.Rows[0].Cells[1].Paragraphs.First().Append("ЗАГЛУШКА_Класс ВВСТ");
+                class_table.Rows[0].Cells[1].Paragraphs.First().Append(model.project_properties.VVST_class);
                 class_table.Rows[1].Cells[1].Paragraphs.First().Append(tree.Nodes[0].Name.ToString());
 
                 document.InsertTable(class_table);
@@ -565,8 +564,8 @@ namespace KPMay
                 /*int countLeafNodes = CountLeafNodes(nodes);
                 List<string> endNodesValues = GetLeafEndValues(nodes);*/
                 int need_level = 1;
-                var (count_by_level, value_by_level) = GetNodesByLevel(nodes, need_level);
-                var nodesWithParents = GetNodesWithParentsByLevel(nodes, targetLevel: need_level, currentParent: null);
+                var (count_by_level, value_by_level) = GetNodesByLevel(model.systems.Nodes, need_level);
+                var nodesWithParents = GetNodesWithParentsByLevel(model.systems.Nodes, targetLevel: need_level, currentParent: null);
 
                 // Создаём таблицу
                 Xceed.Document.NET.Table big_assessment = document.AddTable(2+ count_by_level, 3); // +1 для заголовка
@@ -620,9 +619,9 @@ namespace KPMay
                 user_info.Rows[0].Cells[2].Paragraphs.First().Append("Организация").Bold();
                 user_info.Rows[0].Cells[3].Paragraphs.First().Append("Подпись").Bold();
 
-                user_info.Rows[1].Cells[0].Paragraphs.First().Append("Зубенко Михаил Петрович");
-                user_info.Rows[1].Cells[1].Paragraphs.First().Append("Босс");
-                user_info.Rows[1].Cells[2].Paragraphs.First().Append("Мафия");
+                user_info.Rows[1].Cells[0].Paragraphs.First().Append(model.project_properties.FIO);
+                user_info.Rows[1].Cells[1].Paragraphs.First().Append(model.project_properties.job);
+                user_info.Rows[1].Cells[2].Paragraphs.First().Append(model.project_properties.enterprise);
                 user_info.Rows[1].Cells[3].Paragraphs.First().Append("");
 
                 document.InsertTable(user_info);
