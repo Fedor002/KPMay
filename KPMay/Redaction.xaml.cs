@@ -20,6 +20,9 @@ using System.Xml.Linq;
 using KPMay.MathHolder;
 using KPMay;
 using Excel = Microsoft.Office.Interop.Excel;
+using Xceed.Document.NET;
+using Xceed.Words.NET;
+using Xceed;
 
 namespace KPMay
 {
@@ -167,7 +170,7 @@ namespace KPMay
             {
                 newId = Guid.NewGuid().ToString();
             }
-            if (treeView1.SelectedItem != null)
+            if (selectedNodeC != null)
             {
                 custom_system selectedNode = selectedNodeC;
                 XmlElement newNode = XML.doc.CreateElement(ct.subsystem);
@@ -200,24 +203,13 @@ namespace KPMay
                 XML.doc.DocumentElement.AppendChild(newNode);
 
                 XmlNode lvl = XML.doc.CreateElement(ct.lvl);
-                lvl.InnerText = "1";
+                lvl.InnerText = "0";
                 newNode.AppendChild(lvl);
 
                 XmlNode critT = XML.doc.CreateElement(ct.critical_technology);
                 critT.InnerText = "critical_technology";
                 newNode.AppendChild(critT);
 
-                XML.SaveXML();
-                MessageBox.Show("Новый узел успешно добавлен!");
-            }
-            else
-            {
-                XmlElement newNode = XML.doc.CreateElement(ct.subsystem);
-                XmlNode name = XML.doc.CreateElement(ct.name);
-                name.InnerText = newNodeName;
-                 XML.SetAttributeToElement(newNode, (ct.id, newId));
-                newNode.AppendChild(name);
-                XML.doc.DocumentElement.SelectSingleNode(ct.system).AppendChild(newNode);
                 XML.SaveXML();
                 MessageBox.Show("Новый узел успешно добавлен!");
             }
@@ -543,24 +535,99 @@ namespace KPMay
 
         private void Button_Click_2(object sender, RoutedEventArgs e)
         {
-            double[,] matrix = new double[2, 2]
-            {
-                { 1, 2 },
-                { 3, 4 }
-            };
+            //Создание отчёта
+            custom_system tree = XML.GetSystemFromXml();
 
-            double[,] matrix2 = new double[2, 3]
+            using (DocX document = DocX.Create(_system_report_path))
             {
-                { 11, 21, 14 },
-                { 35, 14, 15 }
-            };
-            XML.AddMatrixToNode(("enterprise_matrix", matrix),("id", "0"));
-            XML.AddMatrixToNode(("integration_matrix", matrix2), ("id", "0"));
-            XML.AddUniqueChildToNodeById(("enterprise_grade", "5"), ("id", "0"));
-            XML.AddUniqueChildToNodeById(("technology_grade", "6"), ("id", "0"));
-            XML.AddUniqueChildToNodeById(("enterprise_grade", "9"), ("id", "1"));
-            XML.SaveXML();
-            ReloadTreeView();
+                // Добавляем заголовок
+                document.InsertParagraph("Отчёт").FontSize(18).Bold().Alignment = Alignment.center;
+
+                document.InsertParagraph("");
+                document.InsertParagraph("Данные о классе").FontSize(16).Italic();
+
+                // Создаём таблицу
+                Xceed.Document.NET.Table class_table = document.AddTable(2, 2); // +1 для заголовка
+                class_table.Design = TableDesign.TableGrid;
+
+                // Заголовки
+                class_table.Rows[0].Cells[0].Paragraphs.First().Append("Класс ВВСТ").Bold();
+                class_table.Rows[1].Cells[0].Paragraphs.First().Append("Наименование перспективного образца ВВСИ").Bold();
+
+                class_table.Rows[0].Cells[1].Paragraphs.First().Append("ЗАГЛУШКА_Класс ВВСТ");
+                class_table.Rows[1].Cells[1].Paragraphs.First().Append(tree.Nodes[0].Name.ToString());
+
+                document.InsertTable(class_table);
+
+                document.InsertParagraph("");
+                document.InsertParagraph("Комплексная оценка проектных и производственных уровней готовности").FontSize(16).Italic();
+
+                /*int countLeafNodes = CountLeafNodes(nodes);
+                List<string> endNodesValues = GetLeafEndValues(nodes);*/
+                int need_level = 1;
+                var (count_by_level, value_by_level) = GetNodesByLevel(nodes, need_level);
+                var nodesWithParents = GetNodesWithParentsByLevel(nodes, targetLevel: need_level, currentParent: null);
+
+                // Создаём таблицу
+                Xceed.Document.NET.Table big_assessment = document.AddTable(2+ count_by_level, 3); // +1 для заголовка
+                big_assessment.Design = TableDesign.TableGrid;
+
+                big_assessment.Rows[0].Cells[0].Paragraphs.First().Append("Наименование типового образца ВВТ").Bold();
+                big_assessment.Rows[0].Cells[1].Paragraphs.First().Append("Наименование составной части").Bold();
+                big_assessment.Rows[1].Cells[0].Paragraphs.First().Append(tree.Nodes[0].Name);
+                big_assessment.Rows[1].Cells[1].Paragraphs.First().Append((need_level - 1).ToString() + "-й уровень");
+                big_assessment.Rows[1].Cells[2].Paragraphs.First().Append((need_level).ToString() + "-й уровень");
+
+                big_assessment.MergeCellsInColumn(0, 0, 1);
+                big_assessment.MergeCellsInColumn(0, 1, big_assessment.RowCount-1);
+                big_assessment.Rows[0].MergeCells(1, 2);
+
+                for (int i = 0; i < count_by_level; i++)
+                {
+                    big_assessment.Rows[2 + i].Cells[1].Paragraphs.First().Append(nodesWithParents[i].ParentValue);
+
+                    big_assessment.Rows[2 + i].Cells[2].Paragraphs.First().Append(nodesWithParents[i].NodeValue);
+                }
+
+                big_assessment.MergeCellsInColumn(0, 0, 1);
+                big_assessment.MergeCellsInColumn(0, 1, big_assessment.RowCount - 1);
+                big_assessment.Rows[0].MergeCells(1, 2);
+
+                document.InsertTable(big_assessment);
+                document.InsertParagraph("");
+
+                /*// Создаём таблицу
+                Xceed.Document.NET.Table final_assessment = document.AddTable(2, 1); // +1 для заголовка
+                final_assessment.Design = TableDesign.TableGrid;
+
+                // Заголовки
+                final_assessment.Rows[0].Cells[0].Paragraphs.First().Append("Расчёт КУГ").Bold();
+
+                final_assessment.Rows[1].Cells[0].Paragraphs.First().Append("ЗАГЛУШКА_КУГ");
+
+                document.InsertTable(final_assessment);
+                document.InsertParagraph("");*/
+
+                document.InsertParagraph("Данные об эксперте").FontSize(16).Italic();
+
+                // Создаём таблицу
+                Xceed.Document.NET.Table user_info = document.AddTable(2, 4); // +1 для заголовка
+                user_info.Design = TableDesign.TableGrid;
+
+                // Заголовки
+                user_info.Rows[0].Cells[0].Paragraphs.First().Append("ФИО Эксперта").Bold();
+                user_info.Rows[0].Cells[1].Paragraphs.First().Append("Должность").Bold();
+                user_info.Rows[0].Cells[2].Paragraphs.First().Append("Организация").Bold();
+                user_info.Rows[0].Cells[3].Paragraphs.First().Append("Подпись").Bold();
+
+                user_info.Rows[1].Cells[0].Paragraphs.First().Append("Зубенко Михаил Петрович");
+                user_info.Rows[1].Cells[1].Paragraphs.First().Append("Босс");
+                user_info.Rows[1].Cells[2].Paragraphs.First().Append("Мафия");
+                user_info.Rows[1].Cells[3].Paragraphs.First().Append("");
+
+                document.InsertTable(user_info);
+                document.Save();
+            }
         }
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
@@ -688,6 +755,96 @@ namespace KPMay
         private void Grid_MouseLeftButtonDownIn3(object sender, MouseButtonEventArgs e)
         {
             ShowImageModal(_system_integration_level_path, "Уровни готовности интаграций");
+        }
+
+        public int CountLeafNodes(ObservableCollection<custom_system> rootNodes)
+        {
+            int count = 0;
+
+            foreach (var node in rootNodes)
+            {
+                if (node.Nodes == null || node.Nodes.Count == 0)
+                {
+                    // Это конечный элемент (лист)
+                    count++;
+                }
+                else
+                {
+                    // Рекурсивно считаем листья в дочерних узлах
+                    count += CountLeafNodes(node.Nodes);
+                }
+            }
+
+            return count;
+        }
+
+        public List<string> GetLeafEndValues(ObservableCollection<custom_system> rootNodes)
+        {
+            var leafValues = new List<string>();
+
+            foreach (var node in rootNodes)
+            {
+                if (node.Nodes == null || node.Nodes.Count == 0)
+                {
+                    // Это лист, добавляем его значение в список
+                    leafValues.Add(node.Name); // Предполагаем, что значение хранится в свойстве Value
+                }
+                else
+                {
+                    // Рекурсивно собираем листья из дочерних узлов
+                    leafValues.AddRange(GetLeafEndValues(node.Nodes));
+                }
+            }
+
+            return leafValues;
+        }
+
+        public (int Count, List<string> Values) GetNodesByLevel(ObservableCollection<custom_system> nodes, int targetLevel)
+        {
+            var matchingValues = new List<string>();
+            int count = 0;
+
+            foreach (var node in nodes)
+            {
+                // Если уровень текущего узла совпадает с искомым
+                if (node.lvl == targetLevel)
+                {
+                    matchingValues.Add(node.Name);
+                    count++;
+                }
+
+                // Рекурсивно проверяем дочерние узлы (если они есть)
+                if (node.Nodes != null && node.Nodes.Count > 0)
+                {
+                    var (childCount, childValues) = GetNodesByLevel(node.Nodes, targetLevel);
+                    count += childCount;
+                    matchingValues.AddRange(childValues);
+                }
+            }
+
+            return (count, matchingValues);
+        }
+
+        public List<(string ParentValue, string NodeValue)> GetNodesWithParentsByLevel(ObservableCollection<custom_system> nodes, int targetLevel, custom_system currentParent = null)
+        {
+            var result = new List<(string, string)>();
+
+            foreach (var node in nodes)
+            {
+                if (node.lvl == targetLevel)
+                {
+                    string parentValue = currentParent != null ? currentParent.Name : "Нет родителя";
+                    result.Add((parentValue, node.Name));
+                }
+
+                if (node.Nodes != null && node.Nodes.Count > 0)
+                {
+                    // Рекурсивно передаём текущий узел как родитель для детей
+                    result.AddRange(GetNodesWithParentsByLevel(node.Nodes, targetLevel, node));
+                }
+            }
+
+            return result;
         }
 
         private void mi_open_file_Click(object sender, RoutedEventArgs e)
