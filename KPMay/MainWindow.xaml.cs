@@ -44,12 +44,6 @@ namespace KPMay
             this.DataContext = model;
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            Redaction taskWindow = new Redaction();
-            taskWindow.Show();
-        }
-
         private void bt_setttings_Click(object sender, RoutedEventArgs e)
         {
             Settiings settiings = new Settiings(model);

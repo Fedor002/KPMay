@@ -1,0 +1,29 @@
+﻿<Window x:Class="KPMay.PopUp"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:KPMay"
+        mc:Ignorable="d"
+        Title="PopUp" Height="450" Width="800">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0*"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Label Content="Обащя информация" HorizontalAlignment="Left" Margin="29,28,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
+        <Label Content="ФИО исполнителя:" HorizontalAlignment="Left" Margin="29,59,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
+        <Label Content="Организация исполнителя:" HorizontalAlignment="Left" Margin="29,90,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
+        <Label Content="Должность исполнителя:" HorizontalAlignment="Left" Margin="29,121,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
+        <Label Content="Оценка производства:" HorizontalAlignment="Left" Margin="29,152,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
+        <Label Content="Оценка технологий:" HorizontalAlignment="Left" Margin="29,183,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
+        <Label Content="Оценка интеграции:" HorizontalAlignment="Left" Margin="29,214,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
+        <TextBox HorizontalAlignment="Left" Margin="147,67,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120" IsEnabled="False" Grid.ColumnSpan="2"/>
+        <TextBox HorizontalAlignment="Left" Margin="193,98,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120" IsEnabled="False" Grid.ColumnSpan="2"/>
+        <TextBox HorizontalAlignment="Left" Margin="181,129,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120" IsEnabled="False" Grid.ColumnSpan="2"/>
+        <TextBox HorizontalAlignment="Left" Margin="168,160,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120" IsEnabled="False" Grid.ColumnSpan="2"/>
+        <TextBox HorizontalAlignment="Left" Margin="154,191,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120" IsEnabled="False" Grid.ColumnSpan="2"/>
+        <TextBox HorizontalAlignment="Left" Margin="155,222,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120" IsEnabled="False" Grid.ColumnSpan="2"/>
+
+    </Grid>
+</Window>

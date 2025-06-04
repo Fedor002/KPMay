@@ -12,35 +12,24 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Label Content="Наименование проекта" HorizontalAlignment="Left" Margin="19,11,0,0" VerticalAlignment="Top" FontSize="14" Grid.Row="1"/>
-        <TextBox HorizontalAlignment="Left" Margin="19,45,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120" Grid.Row="1"/>
-        <Button Content="Добавить Уровень" HorizontalAlignment="Left" Margin="19,168,0,0" VerticalAlignment="Top" Width="120" Click="Button_Click" Grid.Row="1"/>
-        <ComboBox x:Name="_ChooseLevel" HorizontalAlignment="Left" Margin="19,307,0,0" VerticalAlignment="Top" Width="120" IsDropDownOpen="True" Grid.Row="1">
+        <Button Content="Добавить Уровень" HorizontalAlignment="Left" Margin="29,114,0,0" VerticalAlignment="Top" Width="120" Click="Button_Click" Grid.Row="1"/>
+        <ComboBox x:Name="_ChooseLevel" HorizontalAlignment="Left" Margin="30,326,0,0" VerticalAlignment="Top" Width="120" IsDropDownOpen="True" Grid.Row="1">
             <ComboBoxItem Content="Уровень 1"/>
             <ComboBoxItem Content="Уровень 2"/>
             <ComboBoxItem Content="Уровень 3"/>
             <ComboBoxItem Content="Уровень 4"/>
             <ComboBoxItem Content="Уровень 5"/>
         </ComboBox>
-        <Button Content="Сформировать Отчет" HorizontalAlignment="Left" Margin="19,350,0,0" VerticalAlignment="Top" Width="140" Click="Button_Click_2" Grid.Row="1" />
+        <Button Content="Сформировать Отчет" HorizontalAlignment="Left" Margin="30,369,0,0" VerticalAlignment="Top" Width="140" Click="Button_Click_2" Grid.Row="1" />
         <Button x:Name="enterprise" Content="Оценка технологий" HorizontalAlignment="Left" Margin="362,350,0,0" VerticalAlignment="Top" Width="140" Click="CreateSquareMatrixButton_Click" Grid.Row="1"/>
         <Button x:Name="technology" Content="Оценка произовдства" HorizontalAlignment="Left" Margin="362,376,0,0" VerticalAlignment="Top" Width="140" Click="CreateSquareMatrixButton_Click" Grid.Row="1"/>
-        <Button Content="Оценка интеграций" HorizontalAlignment="Left" Margin="362,401,0,0" VerticalAlignment="Top" Width="140" Click="CreateSquareMatrixButton_Click" Grid.Row="1"/>
-        <Grid HorizontalAlignment="Left" Height="18" VerticalAlignment="Top" Width="18" Margin="186,18,0,0" MouseLeftButtonDown="Grid_MouseLeftButtonDown" Grid.Row="1">
-            <Ellipse HorizontalAlignment="Left" Height="17" Stroke="Black" VerticalAlignment="Top" Width="17" Cursor="Hand" Fill="Black"/>
-            <Label Content="i" HorizontalAlignment="Left" VerticalAlignment="Top" IsEnabled="False" Width="13" Margin="2,-5,0,0" Foreground="White"/>
-
-        </Grid>
+        
         <Grid HorizontalAlignment="Left" Height="18" VerticalAlignment="Top" Width="18" Margin="339,353,0,0" MouseLeftButtonDown="Grid_MouseLeftButtonDownIn1" Grid.Row="1">
             <Ellipse HorizontalAlignment="Left" Height="17" Stroke="Black" VerticalAlignment="Top" Width="17" Cursor="Hand" Fill="Black"/>
             <Label Content="i" HorizontalAlignment="Center" VerticalAlignment="Top" IsEnabled="False" Width="13" Margin="0,-4,0,0" Foreground="White"/>
 
         </Grid>
         <Grid HorizontalAlignment="Left" Height="18" VerticalAlignment="Top" Width="18" Margin="339,379,0,0" MouseLeftButtonDown="Grid_MouseLeftButtonDownIn2" Grid.Row="1">
-            <Ellipse HorizontalAlignment="Left" Height="17" Stroke="Black" VerticalAlignment="Top" Width="17" Cursor="Hand" Fill="Black"/>
-            <Label Content="i" HorizontalAlignment="Center" VerticalAlignment="Top" IsEnabled="False" Width="13" Margin="0,-4,0,0" Foreground="White"/>
-
-        </Grid>
-        <Grid HorizontalAlignment="Left" Height="18" VerticalAlignment="Top" Width="18" Margin="339,403,0,0" MouseLeftButtonDown="Grid_MouseLeftButtonDownIn3" Grid.Row="1">
             <Ellipse HorizontalAlignment="Left" Height="17" Stroke="Black" VerticalAlignment="Top" Width="17" Cursor="Hand" Fill="Black"/>
             <Label Content="i" HorizontalAlignment="Center" VerticalAlignment="Top" IsEnabled="False" Width="13" Margin="0,-4,0,0" Foreground="White"/>
 
@@ -56,12 +45,9 @@
 
         </Grid>
         <Label Content="Отображение" HorizontalAlignment="Left" Margin="507,17,0,0" VerticalAlignment="Top" Grid.Row="1" />
-        <Button Content="Перейти в подсистему" HorizontalAlignment="Left" Margin="374,45,0,0" VerticalAlignment="Top" Grid.Row="1"/>
-        <Button Content="Сохранить изменения" HorizontalAlignment="Left" Margin="19,77,0,0" VerticalAlignment="Top" Width="140" Click="Button_Click" Grid.Row="1"/>
-        <TextBox x:Name="ElementTextBox" HorizontalAlignment="Left" Margin="19,108,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120" TextChanged="TextBox_TextChanged" Grid.Row="1"/>
-        <Button Content="Создать матрицу системы" HorizontalAlignment="Left" Margin="339,77,0,0" VerticalAlignment="Top" Width="163" Grid.Row="1"/>
+        <TextBox x:Name="ElementTextBox" HorizontalAlignment="Left" Margin="29,54,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120" TextChanged="TextBox_TextChanged" Grid.Row="1"/>
         <Button Content="Удалить элемент" HorizontalAlignment="Left" Height="26" Margin="399,108,0,0" VerticalAlignment="Top" Width="103" Click="Button_Click_1" Grid.Row="1"/>
-        <Button Content="Excel" HorizontalAlignment="Left" Margin="19,386,0,0" VerticalAlignment="Top" Width="140" Click="Button_Click_3" Grid.Row="1"/>
+        <Button Content="Excel" HorizontalAlignment="Left" Margin="30,405,0,0" VerticalAlignment="Top" Width="140" Click="Button_Click_3" Grid.Row="1"/>
 
         <ToolBarTray Background="#FFF4C6D7">
             <ToolBar Background="#FFF4C6D7">
@@ -74,6 +60,6 @@
                 </Menu>
             </ToolBar>
         </ToolBarTray>
-        <TextBox x:Name="ElementTextBox_Copy" HorizontalAlignment="Left" Margin="19,137,0,0" TextWrapping="Wrap" Text="{Binding systems.criticalTechnology}" VerticalAlignment="Top" Width="120" TextChanged="TextBox_TextChanged" Grid.Row="1" local:TBHelper.Placeholder="КТ"/>
+        <TextBox x:Name="ElementTextBox_Copy" HorizontalAlignment="Left" Margin="29,83,0,0" TextWrapping="Wrap" Text="{Binding systems.criticalTechnology}" VerticalAlignment="Top" Width="120" TextChanged="TextBox_TextChanged" Grid.Row="1" local:TBHelper.Placeholder="КТ"/>
     </Grid>
 </Window>

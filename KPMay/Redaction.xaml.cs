@@ -214,7 +214,7 @@ namespace KPMay
                 newNode.AppendChild(lvl);
 
                 XmlNode critT = XML.doc.CreateElement(ct.critical_technology);
-                critT.InnerText = "critical_technology";
+                critT.InnerText = model.systems.criticalTechnology;
                 newNode.AppendChild(critT);
 
                 XML.SaveXML();
@@ -918,6 +918,16 @@ namespace KPMay
         private void treeView1_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
             selectedNodeC = (custom_system)treeView1.SelectedItem;
+        }
+
+        private void Button_Click_4(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void Button_Click_5(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 

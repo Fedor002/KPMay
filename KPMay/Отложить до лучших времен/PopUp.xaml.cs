@@ -24,8 +24,6 @@ namespace KPMay
         public PopUp()
         {
             InitializeComponent();
-            ad_sqlite.CreateDBFile("%APPDATA%\\KorabelProFit", "TestDB");
-            ad_app.CreateBasicTables("%APPDATA%\\KorabelProFit", "TestDB");
         }
     }
 }
